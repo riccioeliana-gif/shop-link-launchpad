@@ -33,42 +33,61 @@ const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
 const VINTED_URL = "https://www.vinted.it/member/57442722";
 const EMAIL = "helloisarthingshop@gmail.com";
 
+const BRAND_TEXT_COLORS = [
+  "text-brand-blue",
+  "text-brand-pink",
+  "text-brand-green",
+  "text-brand-purple",
+  "text-brand-yellow",
+  "text-brand-red",
+];
+
+function ColorWords({ words }: { words: string[] }) {
+  return (
+    <>
+      {words.map((word, index) => (
+        <span key={`${word}-${index}`}>
+          <span className={`color-word ${BRAND_TEXT_COLORS[index % BRAND_TEXT_COLORS.length]}`}>
+            {word}
+          </span>
+          {index < words.length - 1 ? " " : null}
+        </span>
+      ))}
+    </>
+  );
+}
+
 function Index() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
-      {/* ── Navbar ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b-2 border-border bg-background/95 backdrop-blur">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="/" className="group flex items-center gap-4">
+      {/* ── Header ─────────────────────────────────────────── */}
+      <header className="sticky top-0 z-50 border-b-2 border-brand-yellow/40 bg-background/95 backdrop-blur">
+        <nav className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-3 px-4 py-4 sm:grid-cols-[1fr_auto_1fr] sm:px-6">
+          <a
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="toy-block order-2 justify-self-end rounded-full border-2 border-brand-purple bg-card px-4 py-2 text-sm font-extrabold text-brand-purple sm:order-1 sm:justify-self-start"
+            style={{ ["--block-shadow" as string]: "var(--brand-pink)" }}
+          >
+            Instagram
+          </a>
+          <a href="/" className="group order-1 col-span-2 justify-self-center sm:order-2 sm:col-span-1">
             <img
               src={logoAsset.url}
               alt="Isar Things Shop logo"
-              className="size-16 rounded-full border-[3px] border-ink object-cover shadow-[0_4px_0_0_rgba(51,37,28,0.25)] transition-transform group-hover:-rotate-3 sm:size-20"
+              className="size-24 rounded-full border-4 border-brand-pink object-cover shadow-[0_5px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-28"
             />
-            <span className="font-display text-xl font-semibold leading-tight sm:text-2xl lg:text-3xl">
-              Isar Things Shop
-            </span>
           </a>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="toy-block rounded-full border-2 border-ink bg-brand-purple px-4 py-2 text-sm font-extrabold text-primary-foreground"
-              style={{ ["--block-shadow" as string]: "#7c4a87" }}
-            >
-              Instagram
-            </a>
-            <a
-              href={VINTED_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="toy-block rounded-full border-2 border-ink bg-brand-blue px-4 py-2 text-sm font-extrabold text-primary-foreground"
-              style={{ ["--block-shadow" as string]: "#0b4a72" }}
-            >
-              Shop on Vinted
-            </a>
-          </div>
+          <a
+            href={VINTED_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="toy-block order-3 justify-self-start rounded-full border-2 border-brand-blue bg-card px-4 py-2 text-sm font-extrabold text-brand-blue sm:justify-self-end"
+            style={{ ["--block-shadow" as string]: "var(--brand-green)" }}
+          >
+            Shop on Vinted
+          </a>
         </nav>
       </header>
 
@@ -76,15 +95,11 @@ function Index() {
       <main>
         <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 md:grid-cols-2 md:pt-20">
           <div className="relative">
-            <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-ink bg-brand-pink px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-ink">
+            <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-brand-purple bg-card px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-brand-purple">
               Pre-loved • Unique • Carefully selected
             </span>
             <h1 className="font-display text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl">
-              Clothes, things &amp;{" "}
-              <span className="squiggle-underline text-brand-red">
-                little treasures
-              </span>{" "}
-              made for everyone.
+              <ColorWords words={["Clothes,", "things", "&", "little", "treasures", "made", "for", "everyone."]} />
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
               A colorful corner for unique pre-loved finds — every piece picked
@@ -95,8 +110,8 @@ function Index() {
                 href={VINTED_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="toy-block rounded-3xl border-2 border-ink bg-brand-red px-8 py-4 text-lg font-extrabold text-primary-foreground"
-                style={{ ["--block-shadow" as string]: "#a72c0e" }}
+                className="toy-block rounded-3xl border-2 border-brand-blue bg-brand-blue px-8 py-4 text-lg font-extrabold text-primary-foreground"
+                style={{ ["--block-shadow" as string]: "var(--brand-purple)" }}
               >
                 Shop on Vinted →
               </a>
@@ -104,7 +119,7 @@ function Index() {
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-3xl border-2 border-ink px-6 py-4 text-lg font-extrabold underline decoration-brand-yellow decoration-4 underline-offset-4 transition-colors hover:bg-muted"
+                className="rounded-3xl border-2 border-brand-green bg-card px-6 py-4 text-lg font-extrabold text-brand-green underline decoration-brand-yellow decoration-4 underline-offset-4 transition-colors hover:bg-muted"
               >
                 Follow on Instagram
               </a>
@@ -120,7 +135,7 @@ function Index() {
               src={jacketAsset.url}
               alt="Denim jacket covered in colorful fuzzy shape patches reading Safe space, bold colors"
               className="toy-piece relative w-full -rotate-2 rounded-[2.5rem] object-cover"
-              style={{ ["--piece-shadow" as string]: "var(--brand-pink)" }}
+              style={{ ["--piece-border" as string]: "var(--brand-purple)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
             />
             <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 -rotate-2 rounded-full border-2 border-ink bg-brand-blue px-5 py-1.5 whitespace-nowrap text-xs font-extrabold uppercase tracking-widest text-primary-foreground shadow-[0_3px_0_0_#0b4a72] sm:text-sm">
               Safe space, bold colors
@@ -131,7 +146,7 @@ function Index() {
         {/* ── Shape-cutout content cards ─────────────────────── */}
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
           <h2 className="text-center font-display text-3xl font-bold sm:text-4xl">
-            Pick your shape <span className="text-brand-blue">↓</span>
+            <ColorWords words={["Pick", "your", "shape", "↓"]} />
           </h2>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             {/* Circle — Instagram */}
@@ -140,7 +155,7 @@ function Index() {
               target="_blank"
               rel="noreferrer"
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-shadow" as string]: "var(--brand-pink)" }}
+              style={{ ["--piece-border" as string]: "var(--brand-pink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
             >
               <span className="mx-auto grid size-20 place-items-center rounded-full border-[3px] border-ink bg-brand-pink transition-transform group-hover:scale-110">
                 <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -149,7 +164,7 @@ function Index() {
                   <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
                 </svg>
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold">Instagram</h3>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-purple">Instagram</h3>
               <p className="mt-2 font-semibold text-muted-foreground">
                 Daily drops, styling inspo &amp; behind the scenes.
               </p>
@@ -164,7 +179,7 @@ function Index() {
               target="_blank"
               rel="noreferrer"
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-shadow" as string]: "var(--brand-blue)" }}
+              style={{ ["--piece-border" as string]: "var(--brand-blue)", ["--piece-shadow" as string]: "var(--brand-blue)" }}
             >
               <span className="mx-auto grid size-20 place-items-center rounded-2xl border-[3px] border-ink bg-brand-yellow transition-transform group-hover:scale-110">
                 <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -172,7 +187,7 @@ function Index() {
                   <path d="M9 10V6a3 3 0 0 1 6 0v4" />
                 </svg>
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold">Shop on Vinted</h3>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-blue">Shop on Vinted</h3>
               <p className="mt-2 font-semibold text-muted-foreground">
                 Browse the full collection &amp; grab the latest drop.
               </p>
@@ -185,7 +200,7 @@ function Index() {
             <a
               href={`mailto:${EMAIL}`}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-shadow" as string]: "var(--brand-green)" }}
+              style={{ ["--piece-border" as string]: "var(--brand-green)", ["--piece-shadow" as string]: "var(--brand-green)" }}
             >
               <span className="mx-auto grid size-20 place-items-center rounded-full border-[3px] border-ink bg-brand-green transition-transform group-hover:scale-110">
                 <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -193,7 +208,7 @@ function Index() {
                   <path d="m2 7 10 7 10-7" />
                 </svg>
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold">Say hello</h3>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-green">Say hello</h3>
               <p className="mt-2 font-semibold text-muted-foreground">
                 Questions, size checks or just a hi — we reply with a smile.
               </p>
@@ -221,14 +236,14 @@ function Index() {
             ))}
           </div>
           <p className="font-display text-lg font-bold">
-            A safe space, bold colors — everyone's welcome here.
+            <ColorWords words={["A", "safe", "space,", "bold", "colors", "—", "everyone's", "welcome", "here."]} />
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-extrabold">
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-brand-pink decoration-4 underline-offset-4 hover:text-brand-purple"
+              className="text-brand-purple underline decoration-brand-pink decoration-4 underline-offset-4 hover:text-brand-pink"
             >
               Instagram
             </a>
@@ -236,7 +251,7 @@ function Index() {
               href={VINTED_URL}
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-brand-yellow decoration-4 underline-offset-4 hover:text-brand-blue"
+              className="text-brand-blue underline decoration-brand-yellow decoration-4 underline-offset-4 hover:text-brand-yellow"
             >
               Vinted
             </a>

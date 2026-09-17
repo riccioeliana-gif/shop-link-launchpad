@@ -59,22 +59,23 @@
   --brand-blue: #10659c;
   --brand-green: #268e61;
   --brand-purple: #9e61a7;
-  --cream: #fdf8ef;
+  --cream: #fff4dd;
   --ink: #33251c;
+  --soft-ink: #695448;
 
   --radius: 1.25rem;
   --background: var(--cream);
   --foreground: var(--ink);
-  --card: #fffdf8;
+  --card: #fffaf0;
   --card-foreground: var(--ink);
-  --popover: #fffdf8;
+  --popover: #fffaf0;
   --popover-foreground: var(--ink);
   --primary: var(--brand-red);
   --primary-foreground: #fff8ef;
   --secondary: oklch(0.93 0.04 20);
   --secondary-foreground: var(--ink);
-  --muted: #f7eedd;
-  --muted-foreground: #8a7461;
+  --muted: #f9e8c8;
+  --muted-foreground: var(--soft-ink);
   --accent: var(--brand-yellow);
   --accent-foreground: var(--ink);
   --destructive: oklch(0.577 0.245 27.325);
@@ -113,7 +114,7 @@
 
   /* Rounded card that sits like a chunky toy piece on the page */
   .toy-piece {
-    border: 3px solid var(--ink);
+    border: 3px solid var(--piece-border, var(--brand-purple));
     box-shadow: 8px 8px 0 0 var(--piece-shadow, var(--brand-pink));
     transition: transform 150ms ease, box-shadow 150ms ease;
   }
@@ -129,5 +130,10 @@
     background-position: 0 100%;
     background-size: 100% 0.35em;
     padding-bottom: 0.25em;
+  }
+
+  .color-word {
+    display: inline-block;
+    text-shadow: 0 2px 0 color-mix(in srgb, currentColor 18%, transparent);
   }
 }

@@ -47,7 +47,7 @@
   --color-cream: var(--cream);
   --color-ink: var(--ink);
 
-  --font-display: "Shantell Sans", "Comic Sans MS", cursive;
+  --font-display: "Fredoka", "Arial Rounded MT Bold", ui-rounded, sans-serif;
   --font-body: "Nunito", ui-rounded, sans-serif;
 }
 

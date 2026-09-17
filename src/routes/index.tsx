@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import logoAsset from "@/assets/isar-logo.jpg.asset.json";
-import shapeSorter from "@/assets/shape-sorter.png";
+import jacketAsset from "@/assets/jacket-patches.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -81,13 +81,13 @@ function Index() {
       {/* ── Navbar ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b-2 border-border bg-background/95 backdrop-blur">
         <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-          <a href="/" className="flex items-center gap-3">
+          <a href="/" className="group flex items-center gap-4">
             <img
               src={logoAsset.url}
               alt="Isar Things Shop logo"
-              className="size-11 rounded-full border-2 border-ink object-cover"
+              className="size-16 rounded-full border-[3px] border-ink object-cover shadow-[0_4px_0_0_rgba(51,37,28,0.25)] transition-transform group-hover:-rotate-3 sm:size-20"
             />
-            <span className="font-display text-lg font-bold tracking-tight sm:text-xl">
+            <span className="font-display text-xl font-bold leading-tight tracking-tight sm:text-2xl lg:text-3xl">
               Isar Things Shop
             </span>
           </a>
@@ -159,15 +159,17 @@ function Index() {
           <div className="relative mx-auto w-full max-w-md">
             <div
               aria-hidden="true"
-              className="absolute inset-6 -rotate-6 rounded-[3rem] bg-brand-yellow/30"
+              className="absolute inset-4 rotate-3 rounded-[3rem] bg-brand-yellow/30"
             />
             <img
-              src={shapeSorter}
-              alt="Colorful shape-sorter toy with scattered shapes"
-              width={1024}
-              height={1024}
-              className="relative w-full drop-shadow-xl"
+              src={jacketAsset.url}
+              alt="Denim jacket covered in colorful fuzzy shape patches reading Safe space, bold colors"
+              className="toy-piece relative w-full -rotate-2 rounded-[2.5rem] object-cover"
+              style={{ ["--piece-shadow" as string]: "var(--brand-pink)" }}
             />
+            <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 -rotate-2 rounded-full border-2 border-ink bg-brand-blue px-5 py-1.5 whitespace-nowrap text-xs font-extrabold uppercase tracking-widest text-primary-foreground shadow-[0_3px_0_0_#0b4a72] sm:text-sm">
+              Safe space, bold colors
+            </span>
           </div>
         </section>
 

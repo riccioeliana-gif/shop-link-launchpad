@@ -62,28 +62,21 @@ function Index() {
     <div className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
       {/* ── Header ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b-2 border-brand-yellow/40 bg-background/95 backdrop-blur">
-        <nav className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-3 px-4 py-4 sm:grid-cols-[1fr_auto_1fr] sm:px-6">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
           <a
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noreferrer"
-            className="toy-block order-2 justify-self-end rounded-full border-2 border-brand-purple bg-card px-4 py-2 text-sm font-extrabold text-brand-purple sm:order-1 sm:justify-self-start"
+            className="toy-block rounded-full border-2 border-brand-purple bg-card px-3.5 py-1.5 text-sm font-extrabold text-brand-purple"
             style={{ ["--block-shadow" as string]: "var(--brand-pink)" }}
           >
             Instagram
-          </a>
-          <a href="/" className="group order-1 col-span-2 justify-self-center sm:order-2 sm:col-span-1">
-            <img
-              src={logoAsset.url}
-              alt="Isar Things Shop logo"
-              className="size-24 rounded-full border-4 border-brand-pink object-cover shadow-[0_5px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-28"
-            />
           </a>
           <a
             href={VINTED_URL}
             target="_blank"
             rel="noreferrer"
-            className="toy-block order-3 justify-self-start rounded-full border-2 border-brand-blue bg-card px-4 py-2 text-sm font-extrabold text-brand-blue sm:justify-self-end"
+            className="toy-block rounded-full border-2 border-brand-blue bg-card px-3.5 py-1.5 text-sm font-extrabold text-brand-blue"
             style={{ ["--block-shadow" as string]: "var(--brand-green)" }}
           >
             Shop on Vinted
@@ -93,7 +86,16 @@ function Index() {
 
       {/* ── Hero ───────────────────────────────────────────── */}
       <main>
-        <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 md:grid-cols-2 md:pt-20">
+        <div className="flex justify-center px-4 pt-10 sm:pt-12">
+          <a href="/" className="group">
+            <img
+              src={logoAsset.url}
+              alt="Isar Things Shop logo"
+              className="size-32 rounded-full border-4 border-brand-pink object-cover shadow-[0_6px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-40"
+            />
+          </a>
+        </div>
+        <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 md:grid-cols-2 md:pt-10">
           <div className="relative">
             <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-brand-purple bg-card px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-brand-purple">
               Pre-loved • Unique • Carefully selected

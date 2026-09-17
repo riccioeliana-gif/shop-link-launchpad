@@ -86,7 +86,16 @@ function Index() {
 
       {/* ── Hero ───────────────────────────────────────────── */}
       <main>
-        <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 md:grid-cols-2 md:pt-20">
+        <div className="flex justify-center px-4 pt-10 sm:pt-12">
+          <a href="/" className="group">
+            <img
+              src={logoAsset.url}
+              alt="Isar Things Shop logo"
+              className="size-32 rounded-full border-4 border-brand-pink object-cover shadow-[0_6px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-40"
+            />
+          </a>
+        </div>
+        <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 md:grid-cols-2 md:pt-10">
           <div className="relative">
             <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-brand-purple bg-card px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-brand-purple">
               Pre-loved • Unique • Carefully selected

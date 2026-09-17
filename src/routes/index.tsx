@@ -88,6 +88,13 @@ function Index() {
       <main>
         <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-6 sm:px-6 sm:pt-8 md:grid-cols-2">
           <div className="relative">
+            <a href="/" className="group mb-5 inline-block">
+              <img
+                src={logoAsset.url}
+                alt="Isar Things Shop logo"
+                className="size-28 rounded-full border-4 border-brand-pink object-cover shadow-[0_6px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-32"
+              />
+            </a>
             <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-brand-purple bg-card px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-brand-purple">
               Pre-loved • Unique • Carefully selected
             </span>

@@ -33,48 +33,6 @@ const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
 const VINTED_URL = "https://www.vinted.it/member/57442722";
 const EMAIL = "helloisarthingshop@gmail.com";
 
-/* Hand-drawn style shape doodles used as decorative accents */
-function ShapeDoodles({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 200 200"
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      strokeLinecap="round"
-    >
-      <circle cx="40" cy="40" r="20" stroke="var(--brand-blue)" strokeWidth="7" />
-      <rect
-        x="140"
-        y="24"
-        width="38"
-        height="38"
-        rx="8"
-        stroke="var(--brand-green)"
-        strokeWidth="7"
-        transform="rotate(12 159 43)"
-      />
-      <path
-        d="M100 88l8 16 18 3-13 13 3 18-16-9-16 9 3-18-13-13 18-3z"
-        stroke="var(--brand-yellow)"
-        strokeWidth="7"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M30 130l30 44-52 4z"
-        stroke="var(--brand-purple)"
-        strokeWidth="7"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M130 150c8-14 32-14 40 0s-6 30-20 26-28-12-20-26z"
-        stroke="var(--brand-pink)"
-        strokeWidth="7"
-      />
-    </svg>
-  );
-}
-
 function Index() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
@@ -87,7 +45,7 @@ function Index() {
               alt="Isar Things Shop logo"
               className="size-16 rounded-full border-[3px] border-ink object-cover shadow-[0_4px_0_0_rgba(51,37,28,0.25)] transition-transform group-hover:-rotate-3 sm:size-20"
             />
-            <span className="font-display text-xl font-bold leading-tight tracking-tight sm:text-2xl lg:text-3xl">
+            <span className="font-display text-xl font-semibold leading-tight sm:text-2xl lg:text-3xl">
               Isar Things Shop
             </span>
           </a>
@@ -115,10 +73,7 @@ function Index() {
       </header>
 
       {/* ── Hero ───────────────────────────────────────────── */}
-      <main className="relative">
-        <ShapeDoodles className="pointer-events-none absolute left-2 top-24 hidden w-40 opacity-60 lg:block" />
-        <ShapeDoodles className="pointer-events-none absolute bottom-10 right-4 hidden w-32 rotate-180 opacity-40 lg:block" />
-
+      <main>
         <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-14 sm:px-6 md:grid-cols-2 md:pt-20">
           <div className="relative">
             <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-ink bg-brand-pink px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-ink">

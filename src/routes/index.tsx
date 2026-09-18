@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import logoAsset from "@/assets/isar-logo.jpg.asset.json";
 import jacketAsset from "@/assets/jacket-patches.png.asset.json";
-import heroBgAsset from "@/assets/post-instagram-carosello.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,7 +59,7 @@ function ColorWords({ words }: { words: string[] }) {
 
 function Index() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background font-body text-foreground">
+    <div className="tile-page min-h-screen overflow-x-hidden bg-background font-body text-foreground">
       {/* ── Header ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b-2 border-brand-yellow/40 bg-background/95 backdrop-blur">
         <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
@@ -87,19 +86,7 @@ function Index() {
 
       {/* ── Hero ───────────────────────────────────────────── */}
       <main>
-        <section className="relative mx-auto grid max-w-6xl items-center gap-10 overflow-hidden rounded-[3rem] px-4 pb-16 pt-6 sm:px-6 sm:pt-8 md:grid-cols-2">
-          <img
-            src={heroBgAsset.url}
-            alt=""
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-35 blur-[2px]"
-            style={{
-              WebkitMaskImage:
-                "radial-gradient(ellipse 70% 65% at 50% 50%, black 35%, transparent 78%)",
-              maskImage:
-                "radial-gradient(ellipse 70% 65% at 50% 50%, black 35%, transparent 78%)",
-            }}
-          />
+        <section className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-6 sm:px-6 sm:pt-8 md:grid-cols-2">
           <div className="relative">
             <a href="/" className="group mx-auto mb-5 block w-fit md:mx-0">
               <img

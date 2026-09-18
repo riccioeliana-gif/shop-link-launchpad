@@ -92,14 +92,20 @@ function Index() {
             src={heroBgAsset.url}
             alt=""
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-25 blur-[2px]"
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-35 blur-[2px]"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(ellipse 70% 65% at 50% 50%, black 35%, transparent 78%)",
+              maskImage:
+                "radial-gradient(ellipse 70% 65% at 50% 50%, black 35%, transparent 78%)",
+            }}
           />
           <div className="relative">
             <a href="/" className="group mx-auto mb-5 block w-fit md:mx-0">
               <img
                 src={logoAsset.url}
                 alt="Isar Things Shop logo"
-                className="size-28 rounded-full border-4 border-brand-pink object-cover shadow-[0_6px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-32"
+                className="size-28 rounded-3xl object-cover shadow-[0_6px_0_0_var(--brand-yellow)] transition-transform group-hover:-rotate-3 sm:size-32"
               />
             </a>
             <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-brand-purple bg-card px-4 py-1.5 text-xs font-extrabold uppercase tracking-widest text-brand-purple">

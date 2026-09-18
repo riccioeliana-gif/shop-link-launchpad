@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import logoAsset from "@/assets/isar-logo.jpg.asset.json";
 import jacketAsset from "@/assets/jacket-patches.png.asset.json";
-import portfolioAsset from "@/assets/post-instagram-carosello.png.asset.json";
+import heroBgAsset from "@/assets/post-instagram-carosello.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,7 +32,6 @@ export const Route = createFileRoute("/")({
 
 const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
 const VINTED_URL = "https://www.vinted.it/member/57442722";
-const PORTFOLIO_URL = "https://portfolio.riccio-eliana.workers.dev/#contact";
 const EMAIL = "helloisarthingshop@gmail.com";
 
 const BRAND_TEXT_COLORS = [
@@ -88,7 +87,13 @@ function Index() {
 
       {/* ── Hero ───────────────────────────────────────────── */}
       <main>
-        <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-16 pt-6 sm:px-6 sm:pt-8 md:grid-cols-2">
+        <section className="relative mx-auto grid max-w-6xl items-center gap-10 overflow-hidden rounded-[3rem] px-4 pb-16 pt-6 sm:px-6 sm:pt-8 md:grid-cols-2">
+          <img
+            src={heroBgAsset.url}
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-50"
+          />
           <div className="relative">
             <a href="/" className="group mx-auto mb-5 block w-fit md:mx-0">
               <img
@@ -145,24 +150,6 @@ function Index() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
-          <a
-            href={PORTFOLIO_URL}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Visit Eliana Riccio's portfolio contact page"
-            className="group relative block overflow-hidden rounded-[2.5rem] border-2 border-brand-pink bg-card"
-          >
-            <img
-              src={portfolioAsset.url}
-              alt="Red gingham Gimme pouch in a pink tiled bathroom"
-              className="h-52 w-full object-cover opacity-60 transition-opacity duration-300 group-hover:opacity-100 sm:h-72"
-            />
-            <span className="absolute bottom-4 right-4 rounded-full border-2 border-brand-purple bg-card/90 px-4 py-2 font-display text-sm font-bold text-brand-purple backdrop-blur-sm">
-              Visit the portfolio →
-            </span>
-          </a>
-        </section>
 
         {/* ── Shape-cutout content cards ─────────────────────── */}
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">

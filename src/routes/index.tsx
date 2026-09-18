@@ -92,7 +92,7 @@ function Index() {
             src={heroBgAsset.url}
             alt=""
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-50"
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-25 blur-[2px]"
           />
           <div className="relative">
             <a href="/" className="group mx-auto mb-5 block w-fit md:mx-0">

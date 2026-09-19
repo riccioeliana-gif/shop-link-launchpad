@@ -1,9 +1,20 @@
 {
   "name": "isarthingshop",
+  "workers_dev": true,
   "kv_namespaces": [
     {
       "binding": "WAITLIST",
       "id": "66a5f154ee4547b5888a3f1b42784490",
+    },
+  ],
+  "routes": [
+    {
+      "pattern": "isarthingshop.com",
+      "custom_domain": true,
+    },
+    {
+      "pattern": "www.isarthingshop.com",
+      "custom_domain": true,
     },
   ],
 }

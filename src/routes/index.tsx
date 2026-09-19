@@ -9,6 +9,7 @@ import sageBagUrl from "@/assets/carousel/sage-bag.webp";
 import heartEarringWornUrl from "@/assets/carousel/heart-earring-worn.webp";
 import smileyEarringWornUrl from "@/assets/carousel/smiley-earring-worn.webp";
 import mintCardiganUrl from "@/assets/carousel/mint-stripe-cardigan.webp";
+import purpleNecklaceUrl from "@/assets/carousel/purple-heart-necklace.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,16 +42,27 @@ const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
 const VINTED_URL = "https://www.vinted.it/member/57442722";
 const EMAIL = "helloisarthingshop@gmail.com";
 
+const VINTED_ITEM_URLS = {
+  cardigan: "https://www.vinted.it/items/10054818697-cardigan-in-wool-beige-and-neon-green-striped-size-lxl",
+  heartPouch: "https://www.vinted.it/items/10048925795-makeup-pouch-with-burgundyred-heart-details",
+  heartEarrings: "https://www.vinted.it/items/10046950419-gold-earrings-with-brown-heart-stone",
+  purpleNecklace: "https://www.vinted.it/items/10003869656-purple-necklace-with-hearths",
+};
+
 // Swap each `href` for the direct Instagram post URL when you have it.
 const CAROUSEL_ITEMS = [
   { id: "gingham-pouch", src: ginghamPouchUrl, alt: "Red and pink gingham makeup pouch on a bathtub edge", href: INSTAGRAM_URL },
-  { id: "heart-earrings", src: heartEarringsUrl, alt: "Gold and chocolate-brown heart earrings on a lilac background", href: INSTAGRAM_URL },
-  { id: "mint-stripe-cardigan", src: mintCardiganUrl, alt: "Cream cardigan with mint green stripes and lace cuffs, worn with gold necklaces", href: INSTAGRAM_URL },
-  { id: "teddy-heart-pouch", src: teddyHeartPouchUrl, alt: "Cream teddy-fleece pouch with red hearts, held in one hand", href: INSTAGRAM_URL },
-  { id: "heart-earring-worn", src: heartEarringWornUrl, alt: "Gold and brown heart earring worn on an ear", href: INSTAGRAM_URL },
+  { id: "heart-earrings", src: heartEarringsUrl, alt: "Gold and chocolate-brown heart earrings on a lilac background", href: VINTED_ITEM_URLS.heartEarrings },
+  { id: "mint-stripe-cardigan", src: mintCardiganUrl, alt: "Cream cardigan with mint green stripes and lace cuffs, worn with gold necklaces", href: VINTED_ITEM_URLS.cardigan },
+  { id: "purple-heart-necklace", src: purpleNecklaceUrl, alt: "Lilac heart-shaped bead necklace with gold details, worn over a white t-shirt", href: VINTED_ITEM_URLS.purpleNecklace },
+  { id: "teddy-heart-pouch", src: teddyHeartPouchUrl, alt: "Cream teddy-fleece pouch with red hearts, held in one hand", href: VINTED_ITEM_URLS.heartPouch },
+  { id: "heart-earring-worn", src: heartEarringWornUrl, alt: "Gold and brown heart earring worn on an ear", href: VINTED_ITEM_URLS.heartEarrings },
   { id: "sage-bag", src: sageBagUrl, alt: "Sage green crescent shoulder bag worn with a pink skirt", href: INSTAGRAM_URL },
   { id: "smiley-earring-worn", src: smileyEarringWornUrl, alt: "Gold smiley-face drop earring worn on an ear", href: INSTAGRAM_URL },
 ];
+
+const HEADLINE_INTRO = ["Clothes,", "things", "&", "little", "treasures", "made", "for"];
+const HEADLINE_LINES = ["All kinds of beautiful."];
 
 const CAROUSEL_INTERVAL_MS = 4500;
 
@@ -65,12 +77,12 @@ const BRAND_TEXT_COLORS = [
   "text-brand-red",
 ];
 
-function ColorWords({ words }: { words: string[] }) {
+function ColorWords({ words, offset = 0 }: { words: string[]; offset?: number }) {
   return (
     <>
       {words.map((word, index) => (
         <span key={`${word}-${index}`}>
-          <span className={`color-word ${BRAND_TEXT_COLORS[index % BRAND_TEXT_COLORS.length]}`}>
+          <span className={`color-word ${BRAND_TEXT_COLORS[(index + offset) % BRAND_TEXT_COLORS.length]}`}>
             {word}
           </span>
           {index < words.length - 1 ? " " : null}
@@ -119,6 +131,7 @@ function Index() {
     event:
       | "instagram_link_clicked"
       | "instagram_post_clicked"
+      | "vinted_item_clicked"
       | "vinted_link_clicked"
       | "contact_email_clicked",
     placement: "hero" | "carousel" | "content_card" | "footer",
@@ -155,7 +168,7 @@ function Index() {
     <div className="tile-page min-h-screen overflow-x-hidden bg-background font-body text-foreground">
       {/* ── Hero ───────────────────────────────────────────── */}
       <main>
-        <section className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:grid-cols-[1fr_1.6fr]">
+        <section className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:grid-cols-[1.25fr_1fr]">
           <div className="relative">
             <img
               src={logoUrl}
@@ -164,8 +177,19 @@ function Index() {
               height={313}
               className="mb-6 h-auto w-44 sm:w-56"
             />
-            <h1 className="font-display text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl">
-              <ColorWords words={["Clothes,", "things", "&", "little", "treasures", "made", "for", "everyone."]} />
+            <h1 className="font-display text-4xl font-bold leading-[1.15] sm:text-5xl">
+              <ColorWords words={HEADLINE_INTRO} />
+              {HEADLINE_LINES.map((line, index) => (
+                <span key={line} className="block">
+                  <ColorWords
+                    words={line.split(" ")}
+                    offset={
+                      HEADLINE_INTRO.length +
+                      HEADLINE_LINES.slice(0, index).reduce((count, previous) => count + previous.split(" ").length, 0)
+                    }
+                  />
+                </span>
+              ))}
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
               A colorful corner for unique pre-loved finds — every piece picked
@@ -219,11 +243,12 @@ function Index() {
                         target="_blank"
                         rel="noreferrer"
                         onClick={() =>
-                        captureOutboundClick("instagram_post_clicked", "carousel", {
-                          post_index: index + 1,
-                          photo: item.id,
-                        })
-                      }
+                          captureOutboundClick(
+                            item.href.includes("vinted.") ? "vinted_item_clicked" : "instagram_post_clicked",
+                            "carousel",
+                            { post_index: index + 1, photo: item.id },
+                          )
+                        }
                         className={`toy-piece block w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] overflow-hidden rounded-[2rem] bg-card ${index % 2 === 0 ? "-rotate-1" : "rotate-1"}`}
                         style={{
                           ["--piece-border" as string]: `var(--brand-${color})`,
@@ -240,6 +265,11 @@ function Index() {
                           draggable={false}
                           className="aspect-[4/5] w-full object-cover"
                         />
+                        {item.href.includes("vinted.") ? (
+                          <span className="absolute left-3 top-3 rounded-full border-2 border-ink bg-brand-pink px-3 py-1 text-sm font-extrabold text-ink">
+                            Buy on Vinted →
+                          </span>
+                        ) : null}
                       </a>
                     </li>
                   );
@@ -308,12 +338,36 @@ function Index() {
           </div>
         </section>
 
-        {/* ── Shape-cutout content cards ─────────────────────── */}
+        {/* ── Shop / follow / contact cards ─────────────────────── */}
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
           <h2 className="text-center font-display text-3xl font-bold sm:text-4xl">
-            <ColorWords words={["Pick", "your", "shape", "↓"]} />
+            <ColorWords words={["Shop,", "follow", "or", "say", "hi"]} />
           </h2>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
+            {/* Square — Vinted */}
+            <a
+              href={VINTED_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => captureOutboundClick("vinted_link_clicked", "content_card")}
+              className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
+              style={{ ["--piece-border" as string]: "var(--brand-pink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
+            >
+              <span className="mx-auto grid size-20 place-items-center rounded-2xl border-[3px] border-ink bg-brand-pink transition-transform group-hover:scale-110">
+                <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 7h12l1.5 13h-15z" />
+                  <path d="M9 10V6a3 3 0 0 1 6 0v4" />
+                </svg>
+              </span>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-pink-text">Shop on Vinted</h3>
+              <p className="mt-2 font-semibold text-muted-foreground">
+                Browse the full collection &amp; grab the latest drop.
+              </p>
+              <span className="mt-4 inline-block text-sm font-extrabold text-ink">
+                Visit our Vinted shop →
+              </span>
+            </a>
+
             {/* Circle — Instagram */}
             <a
               href={INSTAGRAM_URL}
@@ -336,30 +390,6 @@ function Index() {
               </p>
               <span className="mt-4 inline-block text-sm font-extrabold text-ink">
                 @isar_things_shop →
-              </span>
-            </a>
-
-            {/* Square — Vinted */}
-            <a
-              href={VINTED_URL}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => captureOutboundClick("vinted_link_clicked", "content_card")}
-              className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-border" as string]: "var(--brand-pink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
-            >
-              <span className="mx-auto grid size-20 place-items-center rounded-2xl border-[3px] border-ink bg-brand-pink transition-transform group-hover:scale-110">
-                <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 7h12l1.5 13h-15z" />
-                  <path d="M9 10V6a3 3 0 0 1 6 0v4" />
-                </svg>
-              </span>
-              <h3 className="mt-5 font-display text-2xl font-bold text-brand-pink-text">Shop on Vinted</h3>
-              <p className="mt-2 font-semibold text-muted-foreground">
-                Browse the full collection &amp; grab the latest drop.
-              </p>
-              <span className="mt-4 inline-block text-sm font-extrabold text-ink">
-                Visit our Vinted shop →
               </span>
             </a>
 

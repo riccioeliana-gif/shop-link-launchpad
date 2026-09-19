@@ -44,6 +44,9 @@
   --color-brand-blue: var(--brand-blue);
   --color-brand-green: var(--brand-green);
   --color-brand-purple: var(--brand-purple);
+  --color-brand-pink-text: var(--brand-pink-text);
+  --color-brand-yellow-text: var(--brand-yellow-text);
+  --color-brand-purple-text: var(--brand-purple-text);
   --color-cream: var(--cream);
   --color-ink: var(--ink);
 
@@ -59,6 +62,10 @@
   --brand-blue: #10659c;
   --brand-green: #268e61;
   --brand-purple: #9e61a7;
+  /* Darker shades of the logo colors for text on cream (logo shades fail contrast) */
+  --brand-pink-text: #cf5566;
+  --brand-yellow-text: #b87500;
+  --brand-purple-text: #87499a;
   --cream: #fff4dd;
   --ink: #33251c;
   --soft-ink: #695448;
@@ -115,7 +122,7 @@
       linear-gradient(to bottom, transparent 94%, color-mix(in oklab, var(--brand-pink) 38%, transparent) 94%),
       linear-gradient(135deg, color-mix(in oklab, var(--brand-pink) 8%, transparent), transparent 62%);
     background-size: 88px 88px;
-    opacity: 0.48;
+    opacity: 0.3;
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent);
     mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent);
   }

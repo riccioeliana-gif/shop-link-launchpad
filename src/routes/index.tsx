@@ -270,6 +270,7 @@ function WaitlistForm({ onJoin }: { onJoin: (email: string) => void }) {
 function Index() {
   const posthog = usePostHog();
   const trackRef = useRef<HTMLUListElement>(null);
+  const waitlistSectionRef = useRef<HTMLElement>(null);
   const autoplayPaused = useRef(false);
 
   const scrollCarousel = (direction: 1 | -1) => {
@@ -310,6 +311,27 @@ function Index() {
     placement: "hero" | "carousel" | "content_card" | "footer",
     properties?: Record<string, string | number>,
   ) => track(event, { placement, ...properties });
+
+  // First time a visitor reaches the email form, so PostHog can compare
+  // waitlist form views against actual signups.
+  useEffect(() => {
+    const section = waitlistSectionRef.current;
+    if (!section || !("IntersectionObserver" in window)) return;
+
+    let tracked = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!tracked && entry?.isIntersecting) {
+          tracked = true;
+          track("waitlist_form_viewed");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   // First time a visitor moves the carousel themselves (autoplay doesn't count).
   const carouselInteracted = useRef(false);
@@ -668,7 +690,7 @@ function Index() {
         </section>
 
         {/* ── Waitlist ───────────────────────────────────────── */}
-        <section className="mx-auto max-w-2xl px-4 pb-20 sm:px-6">
+        <section ref={waitlistSectionRef} className="mx-auto max-w-2xl px-4 pb-20 sm:px-6">
           <WaitlistForm
             onJoin={(email) =>
               track("waitlist_joined", { email_domain: email.split("@")[1] ?? "" })

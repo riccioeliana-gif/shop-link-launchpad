@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { PostHogProvider, usePostHog } from "posthog-js/react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -37,9 +38,18 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const posthog = usePostHog();
   useEffect(() => {
+    if (
+      import.meta.env.VITE_PUBLIC_POSTHOG_KEY &&
+      import.meta.env.VITE_PUBLIC_POSTHOG_HOST
+    ) {
+      posthog.captureException(error, {
+        boundary: "tanstack_root_error_component",
+      });
+    }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
+  }, [error, posthog]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -126,7 +136,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <PostHogRoot>{children}</PostHogRoot>
         <Scripts />
       </body>
     </html>
@@ -141,5 +151,37 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
+  );
+}
+
+function PostHogRoot({ children }: { children: ReactNode }) {
+  const apiKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY;
+  const apiHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
+
+  if (!apiKey || !apiHost) {
+    if (import.meta.env.DEV) {
+      const missingVariable = !apiKey
+        ? "VITE_PUBLIC_POSTHOG_KEY"
+        : "VITE_PUBLIC_POSTHOG_HOST";
+      throw new Error(
+        `${missingVariable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingVariable} is configured`,
+      );
+    }
+
+    return children;
+  }
+
+  return (
+    <PostHogProvider
+      apiKey={apiKey}
+      options={{
+        api_host: apiHost,
+        defaults: "2025-05-24",
+        capture_exceptions: true,
+        debug: import.meta.env.DEV,
+      }}
+    >
+      {children}
+    </PostHogProvider>
   );
 }

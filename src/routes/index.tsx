@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePostHog } from "posthog-js/react";
+import { z } from "zod";
+import { joinWaitlist } from "@/lib/waitlist";
 import logoUrl from "@/assets/isar-logo-clear.webp";
 import ginghamPouchUrl from "@/assets/carousel/gingham-pouch.webp";
 import teddyHeartPouchUrl from "@/assets/carousel/teddy-heart-pouch.webp";
@@ -43,7 +45,8 @@ const VINTED_URL = "https://www.vinted.it/member/57442722";
 const EMAIL = "helloisarthingshop@gmail.com";
 
 const VINTED_ITEM_URLS = {
-  cardigan: "https://www.vinted.it/items/10054818697-cardigan-in-wool-beige-and-neon-green-striped-size-lxl",
+  cardigan:
+    "https://www.vinted.it/items/10054818697-cardigan-in-wool-beige-and-neon-green-striped-size-lxl",
   heartPouch: "https://www.vinted.it/items/10048925795-makeup-pouch-with-burgundyred-heart-details",
   heartEarrings: "https://www.vinted.it/items/10046950419-gold-earrings-with-brown-heart-stone",
   purpleNecklace: "https://www.vinted.it/items/10003869656-purple-necklace-with-hearths",
@@ -51,14 +54,54 @@ const VINTED_ITEM_URLS = {
 
 // Swap each `href` for the direct Instagram post URL when you have it.
 const CAROUSEL_ITEMS = [
-  { id: "gingham-pouch", src: ginghamPouchUrl, alt: "Red and pink gingham makeup pouch on a bathtub edge", href: INSTAGRAM_URL },
-  { id: "heart-earrings", src: heartEarringsUrl, alt: "Gold and chocolate-brown heart earrings on a lilac background", href: VINTED_ITEM_URLS.heartEarrings },
-  { id: "mint-stripe-cardigan", src: mintCardiganUrl, alt: "Cream cardigan with mint green stripes and lace cuffs, worn with gold necklaces", href: VINTED_ITEM_URLS.cardigan },
-  { id: "purple-heart-necklace", src: purpleNecklaceUrl, alt: "Lilac heart-shaped bead necklace with gold details, worn over a white t-shirt", href: VINTED_ITEM_URLS.purpleNecklace },
-  { id: "teddy-heart-pouch", src: teddyHeartPouchUrl, alt: "Cream teddy-fleece pouch with red hearts, held in one hand", href: VINTED_ITEM_URLS.heartPouch },
-  { id: "heart-earring-worn", src: heartEarringWornUrl, alt: "Gold and brown heart earring worn on an ear", href: VINTED_ITEM_URLS.heartEarrings },
-  { id: "sage-bag", src: sageBagUrl, alt: "Sage green crescent shoulder bag worn with a pink skirt", href: INSTAGRAM_URL },
-  { id: "smiley-earring-worn", src: smileyEarringWornUrl, alt: "Gold smiley-face drop earring worn on an ear", href: INSTAGRAM_URL },
+  {
+    id: "gingham-pouch",
+    src: ginghamPouchUrl,
+    alt: "Red and pink gingham makeup pouch on a bathtub edge",
+    href: INSTAGRAM_URL,
+  },
+  {
+    id: "heart-earrings",
+    src: heartEarringsUrl,
+    alt: "Gold and chocolate-brown heart earrings on a lilac background",
+    href: VINTED_ITEM_URLS.heartEarrings,
+  },
+  {
+    id: "mint-stripe-cardigan",
+    src: mintCardiganUrl,
+    alt: "Cream cardigan with mint green stripes and lace cuffs, worn with gold necklaces",
+    href: VINTED_ITEM_URLS.cardigan,
+  },
+  {
+    id: "purple-heart-necklace",
+    src: purpleNecklaceUrl,
+    alt: "Lilac heart-shaped bead necklace with gold details, worn over a white t-shirt",
+    href: VINTED_ITEM_URLS.purpleNecklace,
+  },
+  {
+    id: "teddy-heart-pouch",
+    src: teddyHeartPouchUrl,
+    alt: "Cream teddy-fleece pouch with red hearts, held in one hand",
+    href: VINTED_ITEM_URLS.heartPouch,
+  },
+  {
+    id: "heart-earring-worn",
+    src: heartEarringWornUrl,
+    alt: "Gold and brown heart earring worn on an ear",
+    href: VINTED_ITEM_URLS.heartEarrings,
+  },
+  {
+    id: "sage-bag",
+    src: sageBagUrl,
+    alt: "Sage green crescent shoulder bag worn with a pink skirt",
+    href: INSTAGRAM_URL,
+  },
+  {
+    id: "smiley-earring-worn",
+    src: smileyEarringWornUrl,
+    alt: "Gold smiley-face drop earring worn on an ear",
+    href: INSTAGRAM_URL,
+  },
 ];
 
 const HEADLINE_INTRO = ["Clothes,", "things", "&", "little", "treasures", "made", "for"];
@@ -82,13 +125,145 @@ function ColorWords({ words, offset = 0 }: { words: string[]; offset?: number })
     <>
       {words.map((word, index) => (
         <span key={`${word}-${index}`}>
-          <span className={`color-word ${BRAND_TEXT_COLORS[(index + offset) % BRAND_TEXT_COLORS.length]}`}>
+          <span
+            className={`color-word ${BRAND_TEXT_COLORS[(index + offset) % BRAND_TEXT_COLORS.length]}`}
+          >
             {word}
           </span>
           {index < words.length - 1 ? " " : null}
         </span>
       ))}
     </>
+  );
+}
+
+type WaitlistState =
+  | { status: "idle" }
+  | { status: "submitting" }
+  | { status: "done" }
+  | { status: "error"; message: string };
+
+function WaitlistForm({ onJoin }: { onJoin: (email: string) => void }) {
+  const [state, setState] = useState<WaitlistState>({ status: "idle" });
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (state.status === "submitting") return;
+    setState({ status: "submitting" });
+    try {
+      await joinWaitlist({ data: email });
+      onJoin(email.trim().toLowerCase());
+      setState({ status: "done" });
+    } catch (error) {
+      const message =
+        error instanceof z.ZodError || (error instanceof Error && /email/i.test(error.message))
+          ? "Hmm, that email doesn't look right — mind checking it?"
+          : "Something went wrong. Please try again in a moment!";
+      setState({ status: "error", message });
+    }
+  };
+
+  if (state.status === "done") {
+    return (
+      <div
+        className="toy-piece rounded-[2.5rem] bg-brand-green p-8 text-center"
+        style={{
+          ["--piece-border" as string]: "var(--ink)",
+          ["--piece-shadow" as string]: "var(--brand-yellow)",
+        }}
+        role="status"
+      >
+        <span className="mx-auto grid size-16 place-items-center rounded-full border-[3px] border-ink bg-card">
+          <svg
+            viewBox="0 0 24 24"
+            className="size-8 text-ink"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m4 12.5 5 5L20 6.5" />
+          </svg>
+        </span>
+        <h2 className="mt-4 font-display text-3xl font-bold text-ink">You're on the list! 🎉</h2>
+        <p className="mt-2 font-semibold text-ink/80">
+          We'll drop you a line as soon as something exciting lands.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="toy-piece rounded-[2.5rem] bg-card p-8 text-center sm:p-10"
+      style={{
+        ["--piece-border" as string]: "var(--brand-blue)",
+        ["--piece-shadow" as string]: "var(--brand-blue)",
+      }}
+    >
+      <span className="mx-auto grid size-16 place-items-center rounded-full border-[3px] border-ink bg-brand-blue">
+        <svg
+          viewBox="0 0 24 24"
+          className="size-8 text-ink"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+      </span>
+      <h2 className="mt-4 font-display text-3xl font-bold text-brand-blue-text sm:text-4xl">
+        Get notified of new drops
+      </h2>
+      <p className="mx-auto mt-2 max-w-sm font-semibold text-muted-foreground">
+        Leave your email and we'll let you know when new treasures arrive — no spam, just the good
+        stuff.
+      </p>
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row"
+        noValidate
+      >
+        <label className="sr-only" htmlFor="waitlist-email">
+          Email address
+        </label>
+        <input
+          id="waitlist-email"
+          type="email"
+          name="email"
+          required
+          autoComplete="email"
+          placeholder="your@email.com"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            if (state.status === "error") setState({ status: "idle" });
+          }}
+          aria-invalid={state.status === "error"}
+          className="min-w-0 flex-1 rounded-2xl border-2 border-ink bg-background px-4 py-3 font-semibold text-ink placeholder:text-muted-foreground focus:outline-none focus:ring-4 focus:ring-brand-blue/40"
+        />
+        <button
+          type="submit"
+          disabled={state.status === "submitting"}
+          className="toy-block whitespace-nowrap rounded-2xl border-2 border-brand-blue bg-brand-blue px-5 py-3 text-sm font-extrabold text-ink disabled:cursor-wait disabled:opacity-70 sm:text-base"
+          style={{ ["--block-shadow" as string]: "var(--brand-blue-text)" }}
+        >
+          {state.status === "submitting" ? "Sending…" : "Notify me →"}
+        </button>
+      </form>
+      {state.status === "error" ? (
+        <p className="mt-3 text-sm font-extrabold text-brand-red" role="alert">
+          {state.message}
+        </p>
+      ) : null}
+    </div>
   );
 }
 
@@ -103,7 +278,8 @@ function Index() {
     const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
     const atStart = track.scrollLeft <= 4;
     if (direction === 1 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
-    else if (direction === -1 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    else if (direction === -1 && atStart)
+      track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
     else track.scrollBy({ left: direction * track.clientWidth, behavior: "smooth" });
   };
 
@@ -118,10 +294,7 @@ function Index() {
   }, []);
 
   const track = (event: string, properties?: Record<string, string | number>) => {
-    if (
-      !import.meta.env.VITE_PUBLIC_POSTHOG_KEY ||
-      !import.meta.env.VITE_PUBLIC_POSTHOG_HOST
-    ) {
+    if (!import.meta.env.VITE_PUBLIC_POSTHOG_KEY || !import.meta.env.VITE_PUBLIC_POSTHOG_HOST) {
       return;
     }
     posthog.capture(event, properties);
@@ -185,15 +358,18 @@ function Index() {
                     words={line.split(" ")}
                     offset={
                       HEADLINE_INTRO.length +
-                      HEADLINE_LINES.slice(0, index).reduce((count, previous) => count + previous.split(" ").length, 0)
+                      HEADLINE_LINES.slice(0, index).reduce(
+                        (count, previous) => count + previous.split(" ").length,
+                        0,
+                      )
                     }
                   />
                 </span>
               ))}
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
-              A colorful corner for unique pre-loved finds — every piece picked
-              with a smile. Once they're gone, they won't be coming back!
+              A colorful corner for unique pre-loved finds — every piece picked with a smile. Once
+              they're gone, they won't be coming back!
             </p>
             <div className="mt-8 flex flex-nowrap items-center gap-3">
               <a
@@ -237,14 +413,19 @@ function Index() {
                 {CAROUSEL_ITEMS.map((item, index) => {
                   const color = CAROUSEL_COLORS[index % CAROUSEL_COLORS.length];
                   return (
-                    <li key={item.src} className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3">
+                    <li
+                      key={item.src}
+                      className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3"
+                    >
                       <a
                         href={item.href}
                         target="_blank"
                         rel="noreferrer"
                         onClick={() =>
                           captureOutboundClick(
-                            item.href.includes("vinted.") ? "vinted_item_clicked" : "instagram_post_clicked",
+                            item.href.includes("vinted.")
+                              ? "vinted_item_clicked"
+                              : "instagram_post_clicked",
                             "carousel",
                             { post_index: index + 1, photo: item.id },
                           )
@@ -281,16 +462,32 @@ function Index() {
                     rel="noreferrer"
                     onClick={() => captureOutboundClick("vinted_link_clicked", "carousel")}
                     className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-4 rounded-[2rem] bg-brand-pink p-6 text-center"
-                    style={{ ["--piece-border" as string]: "var(--ink)", ["--piece-shadow" as string]: "var(--brand-yellow)" }}
+                    style={{
+                      ["--piece-border" as string]: "var(--ink)",
+                      ["--piece-shadow" as string]: "var(--brand-yellow)",
+                    }}
                   >
                     <span className="grid size-24 place-items-center rounded-3xl border-[3px] border-ink bg-card">
-                      <svg viewBox="0 0 24 24" className="size-12 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="size-12 text-ink"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
                         <path d="M6 7h12l1.5 13h-15z" />
                         <path d="M9 10V6a3 3 0 0 1 6 0v4" />
                       </svg>
                     </span>
-                    <span className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">Every item is on Vinted</span>
-                    <span className="mt-2 rounded-2xl border-2 border-ink bg-card px-5 py-2.5 text-base font-extrabold text-ink shadow-[0_5px_0_0_var(--ink)]">Browse the shop →</span>
+                    <span className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">
+                      Every item is on Vinted
+                    </span>
+                    <span className="mt-2 rounded-2xl border-2 border-ink bg-card px-5 py-2.5 text-base font-extrabold text-ink shadow-[0_5px_0_0_var(--ink)]">
+                      Browse the shop →
+                    </span>
                   </a>
                 </li>
                 <li className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3">
@@ -300,17 +497,32 @@ function Index() {
                     rel="noreferrer"
                     onClick={() => captureOutboundClick("instagram_link_clicked", "carousel")}
                     className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-4 rounded-[2rem] bg-brand-yellow p-6 text-center"
-                    style={{ ["--piece-border" as string]: "var(--ink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
+                    style={{
+                      ["--piece-border" as string]: "var(--ink)",
+                      ["--piece-shadow" as string]: "var(--brand-pink)",
+                    }}
                   >
                     <span className="grid size-24 place-items-center rounded-full border-[3px] border-ink bg-card">
-                      <svg viewBox="0 0 24 24" className="size-12 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        className="size-12 text-ink"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        aria-hidden="true"
+                      >
                         <rect x="3" y="3" width="18" height="18" rx="5" />
                         <circle cx="12" cy="12" r="4" />
                         <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
                       </svg>
                     </span>
-                    <span className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">More on Instagram</span>
-                    <span className="mt-2 rounded-2xl border-2 border-ink bg-card px-5 py-2.5 text-base font-extrabold text-ink shadow-[0_5px_0_0_var(--ink)]">@isar_things_shop →</span>
+                    <span className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">
+                      More on Instagram
+                    </span>
+                    <span className="mt-2 rounded-2xl border-2 border-ink bg-card px-5 py-2.5 text-base font-extrabold text-ink shadow-[0_5px_0_0_var(--ink)]">
+                      @isar_things_shop →
+                    </span>
                   </a>
                 </li>
               </ul>
@@ -351,15 +563,28 @@ function Index() {
               rel="noreferrer"
               onClick={() => captureOutboundClick("vinted_link_clicked", "content_card")}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-border" as string]: "var(--brand-pink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
+              style={{
+                ["--piece-border" as string]: "var(--brand-pink)",
+                ["--piece-shadow" as string]: "var(--brand-pink)",
+              }}
             >
               <span className="mx-auto grid size-20 place-items-center rounded-2xl border-[3px] border-ink bg-brand-pink transition-transform group-hover:scale-110">
-                <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="size-9 text-ink"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M6 7h12l1.5 13h-15z" />
                   <path d="M9 10V6a3 3 0 0 1 6 0v4" />
                 </svg>
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold text-brand-pink-text">Shop on Vinted</h3>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-pink-text">
+                Shop on Vinted
+              </h3>
               <p className="mt-2 font-semibold text-muted-foreground">
                 Browse the full collection &amp; grab the latest drop.
               </p>
@@ -375,16 +600,28 @@ function Index() {
               rel="noreferrer"
               onClick={() => captureOutboundClick("instagram_link_clicked", "content_card")}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-border" as string]: "var(--brand-yellow)", ["--piece-shadow" as string]: "var(--brand-yellow)" }}
+              style={{
+                ["--piece-border" as string]: "var(--brand-yellow)",
+                ["--piece-shadow" as string]: "var(--brand-yellow)",
+              }}
             >
               <span className="mx-auto grid size-20 place-items-center rounded-full border-[3px] border-ink bg-brand-yellow transition-transform group-hover:scale-110">
-                <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="size-9 text-ink"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                >
                   <rect x="3" y="3" width="18" height="18" rx="5" />
                   <circle cx="12" cy="12" r="4" />
                   <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
                 </svg>
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold text-brand-yellow-text">Instagram</h3>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-yellow-text">
+                Instagram
+              </h3>
               <p className="mt-2 font-semibold text-muted-foreground">
                 Daily drops, styling inspo &amp; behind the scenes.
               </p>
@@ -398,15 +635,28 @@ function Index() {
               href={`mailto:${EMAIL}`}
               onClick={() => captureOutboundClick("contact_email_clicked", "content_card")}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
-              style={{ ["--piece-border" as string]: "var(--brand-purple)", ["--piece-shadow" as string]: "var(--brand-purple)" }}
+              style={{
+                ["--piece-border" as string]: "var(--brand-purple)",
+                ["--piece-shadow" as string]: "var(--brand-purple)",
+              }}
             >
               <span className="mx-auto grid size-20 place-items-center rounded-full border-[3px] border-ink bg-brand-purple transition-transform group-hover:scale-110">
-                <svg viewBox="0 0 24 24" className="size-9 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="size-9 text-ink"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
                   <path d="m2 7 10 7 10-7" />
                 </svg>
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold text-brand-purple-text">Say hello</h3>
+              <h3 className="mt-5 font-display text-2xl font-bold text-brand-purple-text">
+                Say hello
+              </h3>
               <p className="mt-2 font-semibold text-muted-foreground">
                 Questions, size checks or just a hi — we reply with a smile.
               </p>
@@ -415,6 +665,15 @@ function Index() {
               </span>
             </a>
           </div>
+        </section>
+
+        {/* ── Waitlist ───────────────────────────────────────── */}
+        <section className="mx-auto max-w-2xl px-4 pb-20 sm:px-6">
+          <WaitlistForm
+            onJoin={(email) =>
+              track("waitlist_joined", { email_domain: email.split("@")[1] ?? "" })
+            }
+          />
         </section>
       </main>
 
@@ -434,7 +693,19 @@ function Index() {
             ))}
           </div>
           <p className="font-display text-lg font-bold">
-            <ColorWords words={["A", "safe", "space,", "bold", "colors", "—", "everyone's", "welcome", "here."]} />
+            <ColorWords
+              words={[
+                "A",
+                "safe",
+                "space,",
+                "bold",
+                "colors",
+                "—",
+                "everyone's",
+                "welcome",
+                "here.",
+              ]}
+            />
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-extrabold">
             <a

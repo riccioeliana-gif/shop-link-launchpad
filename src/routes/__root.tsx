@@ -40,10 +40,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
   const posthog = usePostHog();
   useEffect(() => {
-    if (
-      import.meta.env.VITE_PUBLIC_POSTHOG_KEY &&
-      import.meta.env.VITE_PUBLIC_POSTHOG_HOST
-    ) {
+    if (import.meta.env.VITE_PUBLIC_POSTHOG_KEY && import.meta.env.VITE_PUBLIC_POSTHOG_HOST) {
       posthog.captureException(error, {
         boundary: "tanstack_root_error_component",
       });
@@ -90,14 +87,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Isar Things Shop" },
       {
         name: "description",
-        content:
-          "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
+        content: "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
       },
       { property: "og:title", content: "Isar Things Shop" },
       {
         property: "og:description",
-        content:
-          "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
+        content: "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -160,9 +155,7 @@ function PostHogRoot({ children }: { children: ReactNode }) {
 
   if (!apiKey || !apiHost) {
     if (import.meta.env.DEV) {
-      const missingVariable = !apiKey
-        ? "VITE_PUBLIC_POSTHOG_KEY"
-        : "VITE_PUBLIC_POSTHOG_HOST";
+      const missingVariable = !apiKey ? "VITE_PUBLIC_POSTHOG_KEY" : "VITE_PUBLIC_POSTHOG_HOST";
       throw new Error(
         `${missingVariable} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingVariable} is configured`,
       );

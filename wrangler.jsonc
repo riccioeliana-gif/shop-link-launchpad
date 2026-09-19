@@ -1,3 +1,9 @@
 {
-  "name": "isarthingshop"
+  "name": "isarthingshop",
+  "kv_namespaces": [
+    {
+      "binding": "WAITLIST",
+      "id": "66a5f154ee4547b5888a3f1b42784490",
+    },
+  ],
 }

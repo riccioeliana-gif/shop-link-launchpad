@@ -118,9 +118,21 @@
     content: "";
     pointer-events: none;
     background-image:
-      linear-gradient(to right, transparent 94%, color-mix(in oklab, var(--brand-pink) 38%, transparent) 94%),
-      linear-gradient(to bottom, transparent 94%, color-mix(in oklab, var(--brand-pink) 38%, transparent) 94%),
-      linear-gradient(135deg, color-mix(in oklab, var(--brand-pink) 8%, transparent), transparent 62%);
+      linear-gradient(
+        to right,
+        transparent 94%,
+        color-mix(in oklab, var(--brand-pink) 38%, transparent) 94%
+      ),
+      linear-gradient(
+        to bottom,
+        transparent 94%,
+        color-mix(in oklab, var(--brand-pink) 38%, transparent) 94%
+      ),
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--brand-pink) 8%, transparent),
+        transparent 62%
+      );
     background-size: 88px 88px;
     opacity: 0.3;
     -webkit-mask-image: linear-gradient(to bottom, transparent, black 7%, black 90%, transparent);
@@ -130,7 +142,9 @@
   /* Tactile toy-block button: chunky 3D base, presses down on click */
   .toy-block {
     box-shadow: 0 6px 0 0 var(--block-shadow, #b53010);
-    transition: transform 120ms ease, box-shadow 120ms ease;
+    transition:
+      transform 120ms ease,
+      box-shadow 120ms ease;
   }
   .toy-block:hover {
     transform: translateY(-2px);
@@ -145,7 +159,9 @@
   .toy-piece {
     border: 3px solid var(--piece-border, var(--brand-purple));
     box-shadow: 8px 8px 0 0 var(--piece-shadow, var(--brand-pink));
-    transition: transform 150ms ease, box-shadow 150ms ease;
+    transition:
+      transform 150ms ease,
+      box-shadow 150ms ease;
   }
   .toy-piece:hover {
     transform: translate(-2px, -2px) rotate(-0.5deg);

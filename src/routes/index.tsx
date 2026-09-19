@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { usePostHog } from "posthog-js/react";
-import logoUrl from "@/assets/isar-logo-clear.png";
+import logoUrl from "@/assets/isar-logo-clear.webp";
 import ginghamPouchUrl from "@/assets/carousel/gingham-pouch.webp";
 import teddyHeartPouchUrl from "@/assets/carousel/teddy-heart-pouch.webp";
 import heartEarringsUrl from "@/assets/carousel/heart-earrings.webp";
 import sageBagUrl from "@/assets/carousel/sage-bag.webp";
 import heartEarringWornUrl from "@/assets/carousel/heart-earring-worn.webp";
 import smileyEarringWornUrl from "@/assets/carousel/smiley-earring-worn.webp";
+import mintCardiganUrl from "@/assets/carousel/mint-stripe-cardigan.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,6 +45,7 @@ const EMAIL = "helloisarthingshop@gmail.com";
 const CAROUSEL_ITEMS = [
   { id: "gingham-pouch", src: ginghamPouchUrl, alt: "Red and pink gingham makeup pouch on a bathtub edge", href: INSTAGRAM_URL },
   { id: "heart-earrings", src: heartEarringsUrl, alt: "Gold and chocolate-brown heart earrings on a lilac background", href: INSTAGRAM_URL },
+  { id: "mint-stripe-cardigan", src: mintCardiganUrl, alt: "Cream cardigan with mint green stripes and lace cuffs, worn with gold necklaces", href: INSTAGRAM_URL },
   { id: "teddy-heart-pouch", src: teddyHeartPouchUrl, alt: "Cream teddy-fleece pouch with red hearts, held in one hand", href: INSTAGRAM_URL },
   { id: "heart-earring-worn", src: heartEarringWornUrl, alt: "Gold and brown heart earring worn on an ear", href: INSTAGRAM_URL },
   { id: "sage-bag", src: sageBagUrl, alt: "Sage green crescent shoulder bag worn with a pink skirt", href: INSTAGRAM_URL },
@@ -158,8 +160,8 @@ function Index() {
             <img
               src={logoUrl}
               alt="Isar Things Shop"
-              width={720}
-              height={469}
+              width={480}
+              height={313}
               className="mb-6 h-auto w-44 sm:w-56"
             />
             <h1 className="font-display text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl">
@@ -244,15 +246,41 @@ function Index() {
                 })}
                 <li className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3">
                   <a
+                    href={VINTED_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => captureOutboundClick("vinted_link_clicked", "carousel")}
+                    className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-4 rounded-[2rem] bg-brand-pink p-6 text-center"
+                    style={{ ["--piece-border" as string]: "var(--ink)", ["--piece-shadow" as string]: "var(--brand-yellow)" }}
+                  >
+                    <span className="grid size-24 place-items-center rounded-3xl border-[3px] border-ink bg-card">
+                      <svg viewBox="0 0 24 24" className="size-12 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M6 7h12l1.5 13h-15z" />
+                        <path d="M9 10V6a3 3 0 0 1 6 0v4" />
+                      </svg>
+                    </span>
+                    <span className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">Every item is on Vinted</span>
+                    <span className="mt-2 rounded-2xl border-2 border-ink bg-card px-5 py-2.5 text-base font-extrabold text-ink shadow-[0_5px_0_0_var(--ink)]">Browse the shop →</span>
+                  </a>
+                </li>
+                <li className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3">
+                  <a
                     href={INSTAGRAM_URL}
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => captureOutboundClick("instagram_link_clicked", "carousel")}
-                    className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-2 rounded-[2rem] bg-brand-yellow p-6 text-center"
+                    className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-4 rounded-[2rem] bg-brand-yellow p-6 text-center"
                     style={{ ["--piece-border" as string]: "var(--ink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
                   >
-                    <span className="font-display text-3xl font-bold text-ink">More on Instagram</span>
-                    <span className="text-base font-extrabold text-ink">@isar_things_shop →</span>
+                    <span className="grid size-24 place-items-center rounded-full border-[3px] border-ink bg-card">
+                      <svg viewBox="0 0 24 24" className="size-12 text-ink" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="5" />
+                        <circle cx="12" cy="12" r="4" />
+                        <circle cx="17.2" cy="6.8" r="0.8" fill="currentColor" stroke="none" />
+                      </svg>
+                    </span>
+                    <span className="font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">More on Instagram</span>
+                    <span className="mt-2 rounded-2xl border-2 border-ink bg-card px-5 py-2.5 text-base font-extrabold text-ink shadow-[0_5px_0_0_var(--ink)]">@isar_things_shop →</span>
                   </a>
                 </li>
               </ul>

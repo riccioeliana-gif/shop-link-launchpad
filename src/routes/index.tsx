@@ -1,7 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import { usePostHog } from "posthog-js/react";
-import logoUrl from "@/assets/isar-logo.jpg";
-import heroUrl from "@/assets/clothes-rack.jpg";
+import logoUrl from "@/assets/isar-logo-clear.png";
+import ginghamPouchUrl from "@/assets/carousel/gingham-pouch.webp";
+import teddyHeartPouchUrl from "@/assets/carousel/teddy-heart-pouch.webp";
+import heartEarringsUrl from "@/assets/carousel/heart-earrings.webp";
+import sageBagUrl from "@/assets/carousel/sage-bag.webp";
+import heartEarringWornUrl from "@/assets/carousel/heart-earring-worn.webp";
+import smileyEarringWornUrl from "@/assets/carousel/smiley-earring-worn.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +40,20 @@ const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
 const VINTED_URL = "https://www.vinted.it/member/57442722";
 const EMAIL = "helloisarthingshop@gmail.com";
 
+// Swap each `href` for the direct Instagram post URL when you have it.
+const CAROUSEL_ITEMS = [
+  { id: "gingham-pouch", src: ginghamPouchUrl, alt: "Red and pink gingham makeup pouch on a bathtub edge", href: INSTAGRAM_URL },
+  { id: "heart-earrings", src: heartEarringsUrl, alt: "Gold and chocolate-brown heart earrings on a lilac background", href: INSTAGRAM_URL },
+  { id: "teddy-heart-pouch", src: teddyHeartPouchUrl, alt: "Cream teddy-fleece pouch with red hearts, held in one hand", href: INSTAGRAM_URL },
+  { id: "heart-earring-worn", src: heartEarringWornUrl, alt: "Gold and brown heart earring worn on an ear", href: INSTAGRAM_URL },
+  { id: "sage-bag", src: sageBagUrl, alt: "Sage green crescent shoulder bag worn with a pink skirt", href: INSTAGRAM_URL },
+  { id: "smiley-earring-worn", src: smileyEarringWornUrl, alt: "Gold smiley-face drop earring worn on an ear", href: INSTAGRAM_URL },
+];
+
+const CAROUSEL_INTERVAL_MS = 4500;
+
+const CAROUSEL_COLORS = ["yellow", "pink", "purple", "blue", "green", "red"] as const;
+
 const BRAND_TEXT_COLORS = [
   "text-brand-blue",
   "text-brand-pink-text",
@@ -60,68 +80,88 @@ function ColorWords({ words }: { words: string[] }) {
 
 function Index() {
   const posthog = usePostHog();
+  const trackRef = useRef<HTMLUListElement>(null);
+  const autoplayPaused = useRef(false);
 
-  const captureOutboundClick = (
-    event: "instagram_link_clicked" | "vinted_link_clicked" | "contact_email_clicked",
-    placement: "header" | "hero" | "content_card" | "footer",
-  ) => {
+  const scrollCarousel = (direction: 1 | -1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    const atStart = track.scrollLeft <= 4;
+    if (direction === 1 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
+    else if (direction === -1 && atStart) track.scrollTo({ left: track.scrollWidth, behavior: "smooth" });
+    else track.scrollBy({ left: direction * track.clientWidth, behavior: "smooth" });
+  };
+
+  // Advance one photo every few seconds. Pauses while the visitor hovers, touches
+  // or focuses the carousel, and never runs for people who prefer reduced motion.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      if (!autoplayPaused.current && !document.hidden) scrollCarousel(1);
+    }, CAROUSEL_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const track = (event: string, properties?: Record<string, string | number>) => {
     if (
       !import.meta.env.VITE_PUBLIC_POSTHOG_KEY ||
       !import.meta.env.VITE_PUBLIC_POSTHOG_HOST
     ) {
       return;
     }
-    posthog.capture(event, { placement });
+    posthog.capture(event, properties);
   };
+
+  const captureOutboundClick = (
+    event:
+      | "instagram_link_clicked"
+      | "instagram_post_clicked"
+      | "vinted_link_clicked"
+      | "contact_email_clicked",
+    placement: "hero" | "carousel" | "content_card" | "footer",
+    properties?: Record<string, string | number>,
+  ) => track(event, { placement, ...properties });
+
+  // First time a visitor moves the carousel themselves (autoplay doesn't count).
+  const carouselInteracted = useRef(false);
+  const trackCarouselInteraction = (method: "arrow" | "swipe") => {
+    if (carouselInteracted.current) return;
+    carouselInteracted.current = true;
+    track("carousel_interacted", { method });
+  };
+
+  // How far down the page visitors get: fires once per threshold per page view.
+  useEffect(() => {
+    const thresholds = [25, 50, 75, 100];
+    const reached = new Set<number>();
+    const onScroll = () => {
+      const { scrollHeight } = document.documentElement;
+      const depth = ((window.scrollY + window.innerHeight) / scrollHeight) * 100;
+      for (const threshold of thresholds) {
+        if (depth >= threshold - 1 && !reached.has(threshold)) {
+          reached.add(threshold);
+          track("scroll_depth", { percent: threshold });
+        }
+      }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="tile-page min-h-screen overflow-x-hidden bg-background font-body text-foreground">
-      {/* ── Header ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 border-b-2 border-brand-yellow/40 bg-background/95 backdrop-blur">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6">
-          <a
-            href="/"
-            aria-label="Isar Things Shop home"
-            className="group block size-14 shrink-0 overflow-hidden rounded-2xl"
-          >
+      {/* ── Hero ───────────────────────────────────────────── */}
+      <main>
+        <section className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-10 sm:px-6 sm:pt-12 md:grid-cols-[1fr_1.6fr]">
+          <div className="relative">
             <img
               src={logoUrl}
               alt="Isar Things Shop"
-              className="size-full scale-[1.25] object-cover transition-transform group-hover:-rotate-3"
+              width={720}
+              height={469}
+              className="mb-6 h-auto w-44 sm:w-56"
             />
-          </a>
-          <div className="flex items-center gap-3">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => captureOutboundClick("instagram_link_clicked", "header")}
-              className="toy-block rounded-full border-2 border-brand-yellow bg-card px-3.5 py-1.5 text-sm font-extrabold text-ink"
-              style={{ ["--block-shadow" as string]: "var(--brand-yellow)" }}
-            >
-              Instagram
-            </a>
-            <a
-              href={VINTED_URL}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => captureOutboundClick("vinted_link_clicked", "header")}
-              className="toy-block rounded-full border-2 border-brand-pink bg-brand-pink px-3.5 py-1.5 text-sm font-extrabold text-ink"
-              style={{ ["--block-shadow" as string]: "var(--brand-pink-text)" }}
-            >
-              Shop on Vinted
-            </a>
-          </div>
-        </nav>
-      </header>
-
-      {/* ── Hero ───────────────────────────────────────────── */}
-      <main>
-        <section className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-6 sm:px-6 sm:pt-8 md:grid-cols-[1fr_1.6fr]">
-          <div className="relative">
-            <span className="mb-5 inline-block -rotate-2 rounded-full border-2 border-brand-purple bg-card px-4 py-1.5 text-sm font-extrabold text-ink">
-              Pre-loved, unique, carefully selected
-            </span>
             <h1 className="font-display text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl">
               <ColorWords words={["Clothes,", "things", "&", "little", "treasures", "made", "for", "everyone."]} />
             </h1>
@@ -152,20 +192,93 @@ function Index() {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full">
-            <div
-              aria-hidden="true"
-              className="absolute inset-4 rotate-3 rounded-[3rem] bg-brand-yellow/30"
-            />
-            <img
-              src={heroUrl}
-              alt="Isar Things Shop sign on a white brick wall next to a red rack of colorful knitted sweaters and a pink chair"
-              className="toy-piece relative w-full -rotate-2 rounded-[2.5rem] object-cover"
-              style={{ ["--piece-border" as string]: "var(--brand-purple)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
-            />
+          <div
+            className="min-w-0"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Latest finds from Instagram"
+            onPointerEnter={() => (autoplayPaused.current = true)}
+            onPointerLeave={() => (autoplayPaused.current = false)}
+            onFocus={() => (autoplayPaused.current = true)}
+            onBlur={() => (autoplayPaused.current = false)}
+          >
+            <div className="relative">
+              <ul
+                ref={trackRef}
+                onTouchMove={() => trackCarouselInteraction("swipe")}
+                className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {CAROUSEL_ITEMS.map((item, index) => {
+                  const color = CAROUSEL_COLORS[index % CAROUSEL_COLORS.length];
+                  return (
+                    <li key={item.src} className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3">
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() =>
+                        captureOutboundClick("instagram_post_clicked", "carousel", {
+                          post_index: index + 1,
+                          photo: item.id,
+                        })
+                      }
+                        className={`toy-piece block w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] overflow-hidden rounded-[2rem] bg-card ${index % 2 === 0 ? "-rotate-1" : "rotate-1"}`}
+                        style={{
+                          ["--piece-border" as string]: `var(--brand-${color})`,
+                          ["--piece-shadow" as string]: `var(--brand-${color})`,
+                        }}
+                      >
+                        <img
+                          src={item.src}
+                          alt={item.alt}
+                          width={720}
+                          height={900}
+                          loading={index === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          draggable={false}
+                          className="aspect-[4/5] w-full object-cover"
+                        />
+                      </a>
+                    </li>
+                  );
+                })}
+                <li className="w-full shrink-0 snap-center flex justify-center px-4 pb-6 pt-3">
+                  <a
+                    href={INSTAGRAM_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => captureOutboundClick("instagram_link_clicked", "carousel")}
+                    className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-2 rounded-[2rem] bg-brand-yellow p-6 text-center"
+                    style={{ ["--piece-border" as string]: "var(--ink)", ["--piece-shadow" as string]: "var(--brand-pink)" }}
+                  >
+                    <span className="font-display text-3xl font-bold text-ink">More on Instagram</span>
+                    <span className="text-base font-extrabold text-ink">@isar_things_shop →</span>
+                  </a>
+                </li>
+              </ul>
+              <span className="pointer-events-none absolute bottom-0 left-1/2 z-10 w-max max-w-[92%] -translate-x-1/2 -rotate-2 rounded-full border-2 border-brand-purple bg-card px-5 py-2 text-center text-base font-extrabold text-ink shadow-[0_4px_0_0_var(--brand-purple)] sm:text-lg">
+                Pre-loved, unique, carefully selected
+              </span>
+            </div>
+            <div className="mt-6 flex justify-center gap-4">
+              {([-1, 1] as const).map((direction) => (
+                <button
+                  key={direction}
+                  type="button"
+                  onClick={() => {
+                    trackCarouselInteraction("arrow");
+                    scrollCarousel(direction);
+                  }}
+                  aria-label={direction === -1 ? "Previous photo" : "Next photo"}
+                  className="toy-block grid size-12 place-items-center rounded-full border-2 border-brand-purple bg-card text-xl font-extrabold text-ink"
+                  style={{ ["--block-shadow" as string]: "var(--brand-purple)" }}
+                >
+                  {direction === -1 ? "←" : "→"}
+                </button>
+              ))}
+            </div>
           </div>
         </section>
-
 
         {/* ── Shape-cutout content cards ─────────────────────── */}
         <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">

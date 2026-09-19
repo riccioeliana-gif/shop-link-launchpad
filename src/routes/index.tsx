@@ -42,7 +42,7 @@ export const Route = createFileRoute("/")({
 
 const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
 const VINTED_URL = "https://www.vinted.it/member/57442722";
-const EMAIL = "helloisarthingshop@gmail.com";
+const EMAIL = "info@isarthingshop.com";
 
 const VINTED_ITEM_URLS = {
   cardigan:

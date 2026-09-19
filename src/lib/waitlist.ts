@@ -39,7 +39,7 @@ async function notifyOwner(email: string): Promise<void> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Isar Things Shop <onboarding@resend.dev>",
+        from: "Isar Things Shop <info@isarthingshop.com>",
         to: ownerEmail,
         subject: `New waitlist signup: ${email}`,
         text: `Someone joined the waitlist!\n\nEmail: ${email}\nTime: ${new Date().toISOString()}`,

@@ -11,6 +11,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { PostHogProvider, usePostHog } from "posthog-js/react";
 
 import appCss from "../styles.css?url";
+import logoUrl from "../assets/isar-logo-clear.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CookieConsent } from "../components/cookie-consent";
 import {
@@ -21,22 +22,31 @@ import {
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
+    <div className="tile-page flex min-h-screen flex-col items-center justify-center bg-background px-4 font-body text-ink">
+      <img
+        src={logoUrl}
+        alt="Isar Things Shop"
+        width={480}
+        height={313}
+        className="mb-8 h-auto w-44 sm:w-56"
+      />
+      <h1 className="font-display text-7xl font-bold tracking-tight sm:text-8xl">
+        <span className="text-brand-red">4</span>
+        <span className="text-brand-yellow">0</span>
+        <span className="text-brand-blue">4</span>
+      </h1>
+      <h2 className="mt-4 font-display text-2xl font-bold">This page wandered off…</h2>
+      <p className="mt-2 max-w-sm text-center text-sm font-semibold text-muted-foreground">
+        The page you're looking for doesn't exist — maybe it already found a new home. But there are
+        plenty of things waiting for you in the shop.
+      </p>
+      <Link
+        to="/"
+        className="toy-block mt-8 whitespace-nowrap rounded-2xl border-2 border-ink bg-brand-red px-6 py-3 text-sm font-extrabold text-ink sm:text-base"
+        style={{ ["--block-shadow" as string]: "var(--brand-red)" }}
+      >
+        Go home
+      </Link>
     </div>
   );
 }
@@ -99,13 +109,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "description",
         content: "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
       },
+      { name: "theme-color", content: "#F7F4E9" },
       { property: "og:title", content: "Isar Things Shop" },
       {
         property: "og:description",
         content: "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "/og-image.png" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
     links: [
       {
@@ -125,7 +138,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap",
       },
-      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "icon", type: "image/png", href: "/favicon.png", sizes: "512x512" },
+      { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { usePostHog } from "posthog-js/react";
 import { z } from "zod";
@@ -34,7 +34,20 @@ export const Route = createFileRoute("/")({
           "Carefully selected, pre-loved and unique. Shop our drops on Vinted and follow along on Instagram.",
       },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://isarthingshop.com/" },
+      {
+        property: "og:image",
+        content: "https://isarthingshop.com/og-image.png",
+      },
+      {
+        property: "og:image:alt",
+        content: "Isar Things Shop — Clothes, things & little treasures",
+      },
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:image",
+        content: "https://isarthingshop.com/og-image.png",
+      },
     ],
   }),
   component: Index,
@@ -120,7 +133,7 @@ const BRAND_TEXT_COLORS = [
   "text-brand-red",
 ];
 
-function ColorWords({ words, offset = 0 }: { words: string[]; offset?: number }) {
+export function ColorWords({ words, offset = 0 }: { words: string[]; offset?: number }) {
   return (
     <>
       {words.map((word, index) => (
@@ -784,6 +797,12 @@ function Index() {
             >
               Cookies
             </button>
+            <Link
+              to="/privacy"
+              className="underline decoration-brand-green decoration-4 underline-offset-4 hover:text-brand-green"
+            >
+              Privacy
+            </Link>
           </div>
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
             © {new Date().getFullYear()} Isar Things Shop

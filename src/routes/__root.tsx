@@ -7,11 +7,17 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { PostHogProvider, usePostHog } from "posthog-js/react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { CookieConsent } from "../components/cookie-consent";
+import {
+  CONSENT_CHANGED_EVENT,
+  readCookieConsent,
+  type CookieConsent as ConsentDecision,
+} from "../lib/consent";
 
 function NotFoundComponent() {
   return (
@@ -40,7 +46,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
   const posthog = usePostHog();
   useEffect(() => {
-    if (import.meta.env.VITE_PUBLIC_POSTHOG_KEY && import.meta.env.VITE_PUBLIC_POSTHOG_HOST) {
+    if (
+      import.meta.env.VITE_PUBLIC_POSTHOG_KEY &&
+      import.meta.env.VITE_PUBLIC_POSTHOG_HOST &&
+      posthog
+    ) {
       posthog.captureException(error, {
         boundary: "tanstack_root_error_component",
       });
@@ -161,20 +171,61 @@ function PostHogRoot({ children }: { children: ReactNode }) {
       );
     }
 
-    return children;
+    return (
+      <>
+        {children}
+        <CookieConsent />
+      </>
+    );
   }
 
   return (
-    <PostHogProvider
-      apiKey={apiKey}
-      options={{
-        api_host: apiHost,
-        defaults: "2025-05-24",
-        capture_exceptions: true,
-        debug: import.meta.env.DEV,
-      }}
-    >
+    <ConsentGatedPostHog apiKey={apiKey} apiHost={apiHost}>
       {children}
-    </PostHogProvider>
+    </ConsentGatedPostHog>
+  );
+}
+
+// PostHog (including session replay) only boots after an explicit "granted"
+// decision, so no analytics run before the visitor accepts the cookie banner.
+function ConsentGatedPostHog({
+  apiKey,
+  apiHost,
+  children,
+}: {
+  apiKey: string;
+  apiHost: string;
+  children: ReactNode;
+}) {
+  const [consent, setConsent] = useState<ConsentDecision | null>(() => readCookieConsent());
+
+  useEffect(() => {
+    const onChanged = () => setConsent(readCookieConsent());
+    window.addEventListener(CONSENT_CHANGED_EVENT, onChanged);
+    return () => window.removeEventListener(CONSENT_CHANGED_EVENT, onChanged);
+  }, []);
+
+  const analytics =
+    consent === "granted" ? (
+      <PostHogProvider
+        apiKey={apiKey}
+        options={{
+          api_host: apiHost,
+          defaults: "2025-05-24",
+          capture_exceptions: true,
+          debug: import.meta.env.DEV,
+        }}
+      >
+        {children}
+      </PostHogProvider>
+    ) : (
+      children
+    );
+
+  return (
+    <>
+      {analytics}
+      <CookieConsent />
+    </>
   );
 }

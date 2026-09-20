@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePostHog } from "posthog-js/react";
 import { z } from "zod";
 import { joinWaitlist } from "@/lib/waitlist";
+import { openCookieBanner } from "@/lib/consent";
 import logoUrl from "@/assets/isar-logo-clear.webp";
 import ginghamPouchUrl from "@/assets/carousel/gingham-pouch.webp";
 import teddyHeartPouchUrl from "@/assets/carousel/teddy-heart-pouch.webp";
@@ -306,7 +307,11 @@ function Index() {
   }, []);
 
   const track = (event: string, properties?: Record<string, string | number>) => {
-    if (!import.meta.env.VITE_PUBLIC_POSTHOG_KEY || !import.meta.env.VITE_PUBLIC_POSTHOG_HOST) {
+    if (
+      !posthog ||
+      !import.meta.env.VITE_PUBLIC_POSTHOG_KEY ||
+      !import.meta.env.VITE_PUBLIC_POSTHOG_HOST
+    ) {
       return;
     }
     posthog.capture(event, properties);
@@ -772,6 +777,13 @@ function Index() {
             >
               {EMAIL}
             </a>
+            <button
+              type="button"
+              onClick={openCookieBanner}
+              className="underline decoration-brand-blue decoration-4 underline-offset-4 hover:text-brand-blue-text"
+            >
+              Cookies
+            </button>
           </div>
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
             © {new Date().getFullYear()} Isar Things Shop

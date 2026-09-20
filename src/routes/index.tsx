@@ -12,6 +12,7 @@ import sageBagUrl from "@/assets/carousel/sage-bag.webp";
 import heartEarringWornUrl from "@/assets/carousel/heart-earring-worn.webp";
 import smileyEarringWornUrl from "@/assets/carousel/smiley-earring-worn.webp";
 import purpleNecklaceUrl from "@/assets/carousel/purple-heart-necklace.webp";
+import newDropUrl from "@/assets/carousel/vinted-10068194813.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -61,6 +62,7 @@ const VINTED_ITEM_URLS = {
   heartPouch: "https://www.vinted.it/items/10048925795-makeup-pouch-with-burgundyred-heart-details",
   heartEarrings: "https://www.vinted.it/items/10046950419-gold-earrings-with-brown-heart-stone",
   purpleNecklace: "https://www.vinted.it/items/10003869656-purple-necklace-with-hearths",
+  newDrop: "https://www.vinted.it/items/10068194813",
 };
 
 // Swap each `href` for the direct Instagram post URL when you have it.
@@ -114,6 +116,13 @@ const CAROUSEL_ITEMS: CarouselItem[] = [
     src: smileyEarringWornUrl,
     alt: "Gold smiley-face drop earring worn on an ear",
     href: INSTAGRAM_URL,
+  },
+  {
+    id: "vinted-new-drop",
+    src: newDropUrl,
+    alt: "Pre-loved item for sale on Vinted",
+    href: VINTED_ITEM_URLS.newDrop,
+    product: "new drop",
   },
 ];
 

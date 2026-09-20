@@ -10,7 +10,6 @@ import heartEarringsUrl from "@/assets/carousel/heart-earrings.webp";
 import sageBagUrl from "@/assets/carousel/sage-bag.webp";
 import heartEarringWornUrl from "@/assets/carousel/heart-earring-worn.webp";
 import smileyEarringWornUrl from "@/assets/carousel/smiley-earring-worn.webp";
-import mintCardiganUrl from "@/assets/carousel/mint-stripe-cardigan.webp";
 import purpleNecklaceUrl from "@/assets/carousel/purple-heart-necklace.webp";
 
 export const Route = createFileRoute("/")({
@@ -45,15 +44,17 @@ const VINTED_URL = "https://www.vinted.it/member/57442722";
 const EMAIL = "info@isarthingshop.com";
 
 const VINTED_ITEM_URLS = {
-  cardigan:
-    "https://www.vinted.it/items/10054818697-cardigan-in-wool-beige-and-neon-green-striped-size-lxl",
   heartPouch: "https://www.vinted.it/items/10048925795-makeup-pouch-with-burgundyred-heart-details",
   heartEarrings: "https://www.vinted.it/items/10046950419-gold-earrings-with-brown-heart-stone",
   purpleNecklace: "https://www.vinted.it/items/10003869656-purple-necklace-with-hearths",
 };
 
 // Swap each `href` for the direct Instagram post URL when you have it.
-const CAROUSEL_ITEMS = [
+// `product` groups Vinted clicks by item even when two photos show the same
+// piece (e.g. the product shot and the "worn" shot). Only Vinted links have it.
+type CarouselItem = { id: string; src: string; alt: string; href: string; product?: string };
+
+const CAROUSEL_ITEMS: CarouselItem[] = [
   {
     id: "gingham-pouch",
     src: ginghamPouchUrl,
@@ -65,30 +66,28 @@ const CAROUSEL_ITEMS = [
     src: heartEarringsUrl,
     alt: "Gold and chocolate-brown heart earrings on a lilac background",
     href: VINTED_ITEM_URLS.heartEarrings,
-  },
-  {
-    id: "mint-stripe-cardigan",
-    src: mintCardiganUrl,
-    alt: "Cream cardigan with mint green stripes and lace cuffs, worn with gold necklaces",
-    href: VINTED_ITEM_URLS.cardigan,
+    product: "heart earrings",
   },
   {
     id: "purple-heart-necklace",
     src: purpleNecklaceUrl,
     alt: "Lilac heart-shaped bead necklace with gold details, worn over a white t-shirt",
     href: VINTED_ITEM_URLS.purpleNecklace,
+    product: "purple heart necklace",
   },
   {
     id: "teddy-heart-pouch",
     src: teddyHeartPouchUrl,
     alt: "Cream teddy-fleece pouch with red hearts, held in one hand",
     href: VINTED_ITEM_URLS.heartPouch,
+    product: "teddy heart pouch",
   },
   {
     id: "heart-earring-worn",
     src: heartEarringWornUrl,
     alt: "Gold and brown heart earring worn on an ear",
     href: VINTED_ITEM_URLS.heartEarrings,
+    product: "heart earrings",
   },
   {
     id: "sage-bag",
@@ -143,23 +142,35 @@ type WaitlistState =
   | { status: "done" }
   | { status: "error"; message: string };
 
-function WaitlistForm({ onJoin }: { onJoin: (email: string) => void }) {
+function WaitlistForm({
+  onJoin,
+  onEvent,
+}: {
+  onJoin: (email: string) => void;
+  onEvent?: (
+    event: "waitlist_submit_clicked" | "waitlist_error",
+    properties?: Record<string, string>,
+  ) => void;
+}) {
   const [state, setState] = useState<WaitlistState>({ status: "idle" });
   const [email, setEmail] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (state.status === "submitting") return;
+    onEvent?.("waitlist_submit_clicked");
     setState({ status: "submitting" });
     try {
       await joinWaitlist({ data: email });
       onJoin(email.trim().toLowerCase());
       setState({ status: "done" });
     } catch (error) {
-      const message =
-        error instanceof z.ZodError || (error instanceof Error && /email/i.test(error.message))
-          ? "Hmm, that email doesn't look right — mind checking it?"
-          : "Something went wrong. Please try again in a moment!";
+      const invalidEmail =
+        error instanceof z.ZodError || (error instanceof Error && /email/i.test(error.message));
+      onEvent?.("waitlist_error", { reason: invalidEmail ? "invalid_email" : "server" });
+      const message = invalidEmail
+        ? "Hmm, that email doesn't look right — mind checking it?"
+        : "Something went wrong. Please try again in a moment!";
       setState({ status: "error", message });
     }
   };
@@ -443,15 +454,20 @@ function Index() {
                         href={item.href}
                         target="_blank"
                         rel="noreferrer"
-                        onClick={() =>
+                        onClick={() => {
+                          const isVinted = item.href.includes("vinted.");
                           captureOutboundClick(
-                            item.href.includes("vinted.")
-                              ? "vinted_item_clicked"
-                              : "instagram_post_clicked",
+                            isVinted ? "vinted_item_clicked" : "instagram_post_clicked",
                             "carousel",
-                            { post_index: index + 1, photo: item.id },
-                          )
-                        }
+                            isVinted
+                              ? {
+                                  post_index: index + 1,
+                                  photo: item.id,
+                                  ...(item.product ? { product: item.product } : {}),
+                                }
+                              : { post_index: index + 1, photo: item.id },
+                          );
+                        }}
                         className={`toy-piece block w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] overflow-hidden rounded-[2rem] bg-card ${index % 2 === 0 ? "-rotate-1" : "rotate-1"}`}
                         style={{
                           ["--piece-border" as string]: `var(--brand-${color})`,
@@ -695,6 +711,7 @@ function Index() {
             onJoin={(email) =>
               track("waitlist_joined", { email_domain: email.split("@")[1] ?? "" })
             }
+            onEvent={track}
           />
         </section>
       </main>

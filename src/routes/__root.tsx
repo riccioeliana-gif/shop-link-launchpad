@@ -110,6 +110,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Clothes, things & little treasures. Carefully selected, pre-loved, unique.",
       },
       { name: "theme-color", content: "#F7F4E9" },
+      { name: "p:domain_verify", content: "a2acb02bc13a095ee1aa2310f03ab426" },
       { property: "og:title", content: "Isar Things Shop" },
       {
         property: "og:description",

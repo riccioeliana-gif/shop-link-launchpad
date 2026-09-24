@@ -4,15 +4,10 @@ import { usePostHog } from "posthog-js/react";
 import { z } from "zod";
 import { joinWaitlist } from "@/lib/waitlist";
 import { openCookieBanner } from "@/lib/consent";
+import { parseCsv } from "@/lib/csv";
 import logoUrl from "@/assets/isar-logo-clear.webp";
-import ginghamPouchUrl from "@/assets/carousel/gingham-pouch.webp";
-import teddyHeartPouchUrl from "@/assets/carousel/teddy-heart-pouch.webp";
-import heartEarringsUrl from "@/assets/carousel/heart-earrings.webp";
-import sageBagUrl from "@/assets/carousel/sage-bag.webp";
-import heartEarringWornUrl from "@/assets/carousel/heart-earring-worn.webp";
-import smileyEarringWornUrl from "@/assets/carousel/smiley-earring-worn.webp";
-import purpleNecklaceUrl from "@/assets/carousel/purple-heart-necklace.webp";
-import stripedMakeupPouchUrl from "@/assets/carousel/striped-makeup-pouch.webp";
+import linksCsv from "@/data/links.csv?raw";
+import carouselCsv from "@/data/carousel.csv?raw";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,77 +49,42 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const INSTAGRAM_URL = "https://www.instagram.com/isar_things_shop/";
-const VINTED_URL = "https://www.vinted.it/member/57442722";
-const EMAIL = "info@isarthingshop.com";
+// Site-wide links, editable in src/data/links.csv.
+const LINKS = Object.fromEntries(parseCsv(linksCsv).map((row) => [row.key, row.value])) as Record<
+  "instagram" | "vinted" | "email",
+  string
+>;
 
-const VINTED_ITEM_URLS = {
-  heartPouch: "https://www.vinted.it/items/10048925795-makeup-pouch-with-burgundyred-heart-details",
-  heartEarrings: "https://www.vinted.it/items/10046950419-gold-earrings-with-brown-heart-stone",
-  purpleNecklace: "https://www.vinted.it/items/10003869656-purple-necklace-with-hearths",
-  stripePouch: "https://www.vinted.it/items/10068194813",
-};
+const INSTAGRAM_URL = LINKS.instagram;
+const VINTED_URL = LINKS.vinted;
+const EMAIL = LINKS.email;
 
-// Swap each `href` for the direct Instagram post URL when you have it.
+// Carousel photos, editable in src/data/carousel.csv. Photos live in
+// src/assets/carousel/ and are matched to CSV rows by filename.
+const carouselImages = import.meta.glob<{ default: string }>("../assets/carousel/*.webp", {
+  eager: true,
+});
+function carouselImageUrl(filename: string): string {
+  const entry = Object.entries(carouselImages).find(([path]) => path.endsWith(`/${filename}`));
+  if (!entry) {
+    throw new Error(
+      `carousel.csv references "${filename}", but no such file exists in src/assets/carousel/.`,
+    );
+  }
+  return entry[1].default;
+}
+
 // `product` groups Vinted clicks by item even when two photos show the same
 // piece (e.g. the product shot and the "worn" shot). Only Vinted links have it.
 type CarouselItem = { id: string; src: string; alt: string; href: string; product?: string };
 
-const CAROUSEL_ITEMS: CarouselItem[] = [
-  {
-    id: "gingham-pouch",
-    src: ginghamPouchUrl,
-    alt: "Red and pink gingham makeup pouch on a bathtub edge",
-    href: INSTAGRAM_URL,
-  },
-  {
-    id: "heart-earrings",
-    src: heartEarringsUrl,
-    alt: "Gold and chocolate-brown heart earrings on a lilac background",
-    href: VINTED_ITEM_URLS.heartEarrings,
-    product: "heart earrings",
-  },
-  {
-    id: "purple-heart-necklace",
-    src: purpleNecklaceUrl,
-    alt: "Lilac heart-shaped bead necklace with gold details, worn over a white t-shirt",
-    href: VINTED_ITEM_URLS.purpleNecklace,
-    product: "purple heart necklace",
-  },
-  {
-    id: "teddy-heart-pouch",
-    src: teddyHeartPouchUrl,
-    alt: "Cream teddy-fleece pouch with red hearts, held in one hand",
-    href: VINTED_ITEM_URLS.heartPouch,
-    product: "teddy heart pouch",
-  },
-  {
-    id: "heart-earring-worn",
-    src: heartEarringWornUrl,
-    alt: "Gold and brown heart earring worn on an ear",
-    href: VINTED_ITEM_URLS.heartEarrings,
-    product: "heart earrings",
-  },
-  {
-    id: "sage-bag",
-    src: sageBagUrl,
-    alt: "Sage green crescent shoulder bag worn with a pink skirt",
-    href: INSTAGRAM_URL,
-  },
-  {
-    id: "smiley-earring-worn",
-    src: smileyEarringWornUrl,
-    alt: "Gold smiley-face drop earring worn on an ear",
-    href: INSTAGRAM_URL,
-  },
-  {
-    id: "striped-makeup-pouch",
-    src: stripedMakeupPouchUrl,
-    alt: "Green and white striped makeup pouch",
-    href: VINTED_ITEM_URLS.stripePouch,
-    product: "striped makeup pouch",
-  },
-];
+const CAROUSEL_ITEMS: CarouselItem[] = parseCsv(carouselCsv).map((row) => ({
+  id: row.id ?? "",
+  src: carouselImageUrl(row.image ?? ""),
+  alt: row.alt ?? "",
+  href: row.link === "instagram" ? INSTAGRAM_URL : (row.link ?? ""),
+  ...(row.product ? { product: row.product } : {}),
+}));
 
 const HEADLINE_INTRO = ["Clothes,", "things", "&", "little", "treasures", "made", "for"];
 const HEADLINE_LINES = ["All kinds of beautiful."];

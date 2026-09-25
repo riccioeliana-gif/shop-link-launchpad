@@ -86,8 +86,8 @@ const CAROUSEL_ITEMS: CarouselItem[] = parseCsv(carouselCsv).map((row) => ({
   ...(row.product ? { product: row.product } : {}),
 }));
 
-const HEADLINE_INTRO = ["Clothes,", "things", "&", "little", "treasures", "made", "for"];
-const HEADLINE_LINES = ["All kinds of beautiful."];
+const HEADLINE_INTRO = ["A", "colorful", "corner", "where", "nothing", "is", "ordinary."];
+const HEADLINE_LINES = ["Including you."];
 
 const CAROUSEL_INTERVAL_MS = 4500;
 
@@ -388,8 +388,6 @@ function Index() {
               ))}
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
-              A colorful corner where nothing is ordinary. Including you.
-              <br />
               Most pieces come in just one size, one color — some, only one exists at all.
             </p>
             <div className="mt-8 flex flex-nowrap items-center gap-3">

@@ -388,8 +388,9 @@ function Index() {
               ))}
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
-              A colorful corner for unique finds — every piece picked with a smile. Once
-              they're gone, they won't be coming back!
+              A colorful corner where nothing is ordinary. Including you.
+              <br />
+              Most pieces come in just one size, one color — some, only one exists at all.
             </p>
             <div className="mt-8 flex flex-nowrap items-center gap-3">
               <a

@@ -184,7 +184,7 @@ function WaitlistForm({
         </span>
         <h2 className="mt-4 font-display text-3xl font-bold text-ink">You're on the list! 🎉</h2>
         <p className="mt-2 font-semibold text-ink/80">
-          We'll drop you a line as soon as something exciting lands.
+          You'll hear about new drops a full day before everyone else.
         </p>
       </div>
     );
@@ -214,11 +214,11 @@ function WaitlistForm({
         </svg>
       </span>
       <h2 className="mt-4 font-display text-3xl font-bold text-brand-blue-text sm:text-4xl">
-        Get notified of new drops
+        See new drops 24 hours before everyone else
       </h2>
       <p className="mx-auto mt-2 max-w-sm font-semibold text-muted-foreground">
-        Leave your email and we'll let you know when new treasures arrive — no spam, just the good
-        stuff.
+        Sign up and we'll send you first access to new treasures — no spam, just early dibs on the
+        good stuff.
       </p>
       <form
         onSubmit={handleSubmit}

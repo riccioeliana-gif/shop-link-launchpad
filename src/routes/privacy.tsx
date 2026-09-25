@@ -70,10 +70,10 @@ function PrivacyPage() {
             You can change your cookie decision any time via the “Cookies” link in the footer of the
             homepage. You can also ask us to delete your waitlist email — just write to{" "}
             <a
-              href="mailto:info@isarthingshop.com"
+              href="mailto:hello@isarthingshop.com"
               className="font-extrabold text-ink underline decoration-brand-purple decoration-4 underline-offset-4 hover:text-brand-purple-text"
             >
-              info@isarthingshop.com
+              hello@isarthingshop.com
             </a>
             .
           </p>

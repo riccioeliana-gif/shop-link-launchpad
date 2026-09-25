@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Carefully selected, pre-loved and unique clothes, things & little treasures. Shop our drops on Vinted and follow along on Instagram.",
+          "Carefully selected, unique clothes, things & little treasures. Shop our drops on Vinted and follow along on Instagram.",
       },
       {
         property: "og:title",
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Carefully selected, pre-loved and unique. Shop our drops on Vinted and follow along on Instagram.",
+          "Carefully selected, unique. Shop our drops on Vinted and follow along on Instagram.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://isarthingshop.com/" },
@@ -388,7 +388,7 @@ function Index() {
               ))}
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
-              A colorful corner for unique pre-loved finds — every piece picked with a smile. Once
+              A colorful corner for unique finds — every piece picked with a smile. Once
               they're gone, they won't be coming back!
             </p>
             <div className="mt-8 flex flex-nowrap items-center gap-3">
@@ -552,7 +552,7 @@ function Index() {
                 </li>
               </ul>
               <span className="pointer-events-none absolute bottom-0 left-1/2 z-10 w-max max-w-[92%] -translate-x-1/2 -rotate-2 rounded-full border-2 border-brand-purple bg-card px-5 py-2 text-center text-base font-extrabold text-ink shadow-[0_4px_0_0_var(--brand-purple)] sm:text-lg">
-                Pre-loved, unique, carefully selected
+                Unique, carefully selected
               </span>
             </div>
             <div className="mt-6 flex justify-center gap-4">

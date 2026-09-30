@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import logoUrl from "../assets/isar-logo-clear.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CookieConsent } from "../components/cookie-consent";
+import { MetricoolTracker } from "../components/metricool-tracker";
 import {
   CONSENT_CHANGED_EVENT,
   readCookieConsent,
@@ -159,6 +160,7 @@ function RootShell({ children }: { children: ReactNode }) {
       </head>
       <body>
         <PostHogRoot>{children}</PostHogRoot>
+        <MetricoolTracker />
         <Scripts />
       </body>
     </html>

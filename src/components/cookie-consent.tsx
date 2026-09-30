@@ -46,7 +46,7 @@ export function CookieConsent() {
         }}
       >
         <p className="text-xs font-semibold leading-relaxed text-muted-foreground sm:text-sm">
-          <span aria-hidden="true">🍪</span> We use one little cookie (via PostHog, fully anonymous)
+          <span aria-hidden="true">🍪</span> We use a few little cookies (via PostHog and Metricool)
           to learn what you love about the shop. No ads, nothing sold.
         </p>
         <div className="mt-3 flex items-center justify-end gap-3">

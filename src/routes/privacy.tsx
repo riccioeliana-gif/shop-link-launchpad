@@ -43,9 +43,10 @@ function PrivacyPage() {
 
         <Section title="What we collect">
           <p>
-            <strong className="text-ink">Website visits:</strong> we use PostHog to understand which
-            pages and products people like. Data is anonymous, hosted in the EU, and only recorded
-            after you accept it in the cookie banner. Nothing is used for advertising.
+            <strong className="text-ink">Website visits:</strong> we use PostHog and Metricool to
+            understand which pages and products people like. PostHog data is anonymous and hosted in
+            the EU. Both only run after you accept them in the cookie banner. Nothing is used for
+            advertising.
           </p>
           <p>
             <strong className="text-ink">Waitlist:</strong> if you join, we keep your email to tell

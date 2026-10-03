@@ -5,6 +5,14 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://isarthingshop.com/blog</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://isarthingshop.com/blog/stripes-are-back</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://isarthingshop.com/privacy</loc>
     <changefreq>yearly</changefreq>
   </url>

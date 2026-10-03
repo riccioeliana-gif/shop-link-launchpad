@@ -1,0 +1,36 @@
+name: vinted-sync
+
+on:
+  schedule:
+    # Twice daily: 04:00 UTC (06:00 Europe/Rome) and 19:00 UTC (21:00 Europe/Rome)
+    - cron: "0 4 * * *"
+    - cron: "0 19 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check Vinted links
+        run: node scripts/vinted-sync.mjs --apply
+
+      - name: Commit fixes
+        run: |
+          if git diff --quiet src/data/carousel.csv; then
+            echo "No stale Vinted links — nothing to commit."
+          else
+            git config user.name "vinted-sync bot"
+            git config user.email "actions@github.com"
+            git add src/data/carousel.csv
+            git commit -m "vinted-sync: point sold item links to profile"
+            git push
+          fi

@@ -9,7 +9,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "vinted-sync": "node scripts/vinted-sync.mjs",
+    "vinted-sync:apply": "node scripts/vinted-sync.mjs --apply"
   },
   "overrides": {
     "rolldown": "1.2.1"

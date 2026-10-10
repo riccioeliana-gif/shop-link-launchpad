@@ -5,6 +5,7 @@ import { z } from "zod";
 import { joinWaitlist } from "@/lib/waitlist";
 import { openCookieBanner } from "@/lib/consent";
 import { parseCsv } from "@/lib/csv";
+import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
 import logoUrl from "@/assets/isar-logo-clear.webp";
 import linksCsv from "@/data/links.csv?raw";
 import carouselCsv from "@/data/carousel.csv?raw";
@@ -265,6 +266,7 @@ function Index() {
   const posthog = usePostHog();
   const trackRef = useRef<HTMLUListElement>(null);
   const waitlistSectionRef = useRef<HTMLElement>(null);
+  const latestPost = getPosts()[0];
   const autoplayPaused = useRef(false);
 
   const scrollCarousel = (direction: 1 | -1) => {
@@ -690,6 +692,51 @@ function Index() {
             </a>
           </div>
         </section>
+
+        {/* ── Latest blog post (always the newest one) ────────── */}
+        {latestPost && (
+          <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6">
+            <h2 className="text-center font-display text-3xl font-bold sm:text-4xl">
+              <ColorWords words={["Fresh", "from", "the", "blog"]} />
+            </h2>
+            <Link
+              to="/blog/$slug"
+              params={{ slug: latestPost.slug }}
+              onClick={() => track("home_blog_post_clicked", { slug: latestPost.slug })}
+              className="toy-piece mt-10 block overflow-hidden rounded-[2.5rem] bg-card sm:flex"
+              style={{
+                ["--piece-border" as string]: "var(--ink)",
+                ["--piece-shadow" as string]: "var(--brand-yellow)",
+              }}
+            >
+              <img
+                src={postImageUrl(latestPost.cover)}
+                alt=""
+                className="aspect-[4/5] w-full border-b-[3px] border-ink object-cover sm:w-2/5 sm:shrink-0 sm:border-b-0 sm:border-r-[3px]"
+              />
+              <div className="p-6 sm:self-center sm:p-8">
+                <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
+                  {formatPostDate(latestPost.date)}
+                </p>
+                <h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">
+                  {latestPost.title}
+                </h3>
+                <p className="mt-2 font-semibold text-muted-foreground">{latestPost.excerpt}</p>
+                <span className="mt-4 inline-block text-sm font-extrabold text-ink">
+                  Read more →
+                </span>
+              </div>
+            </Link>
+            <p className="mt-8 text-center">
+              <Link
+                to="/blog"
+                className="font-extrabold text-ink underline decoration-brand-red decoration-4 underline-offset-4 hover:text-brand-red"
+              >
+                See all posts →
+              </Link>
+            </p>
+          </section>
+        )}
 
         {/* ── Waitlist ───────────────────────────────────────── */}
         <section ref={waitlistSectionRef} className="mx-auto max-w-2xl px-4 pb-20 sm:px-6">

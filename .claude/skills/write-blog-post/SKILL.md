@@ -82,7 +82,7 @@ Rules:
 - Link style: `[Grab the striped sweater on Vinted →](URL)`.
 - Structure: short hook, 2–3 `##` sections, a tip list if useful, 1–3 product moments, a short closing. About 300–500 words.
 - End with the waitlist nudge (join the homepage waitlist for 24h early access) when it fits the tone. Skip it on sensitive topics.
-- Put the sources you were given in the PR description, not in the post.
+- Sources: when the post uses news, facts, figures, dates or an awareness-day theme from the sources you were given, end the post with a short sources line after a `---` rule, e.g. `*Source: [Organisation name](URL), D Month YYYY.*` (several sources: `*Sources: [A](URL), date; [B](URL), date.*`), keeping link text short Only list sources you were actually given and actually used. Posts with no outside facts (styling, shop or mission posts) need no sources line. Also list the sources in the PR description.
 - Styling suggestions must be body- and gender-neutral.
 
 Before finishing, search the file for "second" and rewrite any hit.

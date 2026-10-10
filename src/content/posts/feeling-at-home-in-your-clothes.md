@@ -34,6 +34,10 @@ This coral cardigan is basically a warm hug with pearl buttons. Soft, bright and
 
 The theme this year asks us to hear lived experiences. So here's our small invitation: check in on someone today. Ask how they're *really* doing, and then just listen.
 
+We talked about this on Instagram too, and your comments there are part of the conversation.
+
+[Read the post on Instagram →](https://www.instagram.com/p/DeTtjz7gbuS/)
+
 And if you're the one having a hard time, you don't have to carry it alone. Reach out to someone you trust, or to a local support service near you. Talking is a brave thing to do.
 
 Be gentle with yourself today. You're welcome here, always. 💛

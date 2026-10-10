@@ -20,6 +20,14 @@ One row per carousel photo, in the order they appear on the site.
 Site-wide links: `instagram`, `vinted` (shop front page), `email`. Edit the
 `value` column only.
 
+## Keeping Vinted links valid (`vinted-sync`)
+
+Vinted item links go dead once an item sells. `npm run vinted-sync` checks
+every Vinted link in `carousel.csv` against vinted.it and reports dead ones;
+`npm run vinted-sync:apply` also rewrites dead links to point at your Vinted
+profile page instead. A GitHub Action (`.github/workflows/vinted-sync.yml`)
+runs the apply version twice a day (06:00 and 21:00 Italian time).
+
 ## After editing
 
 Run `npm run build` once to catch typos (missing image file, broken CSV row)

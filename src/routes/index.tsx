@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { usePostHog } from "posthog-js/react";
 import { z } from "zod";
+import { useTrack } from "@/lib/analytics";
 import { joinWaitlist } from "@/lib/waitlist";
 import { openCookieBanner } from "@/lib/consent";
 import { parseCsv } from "@/lib/csv";
@@ -263,7 +263,6 @@ function WaitlistForm({
 }
 
 function Index() {
-  const posthog = usePostHog();
   const trackRef = useRef<HTMLUListElement>(null);
   const waitlistSectionRef = useRef<HTMLElement>(null);
   const latestPost = getPosts()[0];
@@ -290,16 +289,7 @@ function Index() {
     return () => window.clearInterval(timer);
   }, []);
 
-  const track = (event: string, properties?: Record<string, string | number>) => {
-    if (
-      !posthog ||
-      !import.meta.env.VITE_PUBLIC_POSTHOG_KEY ||
-      !import.meta.env.VITE_PUBLIC_POSTHOG_HOST
-    ) {
-      return;
-    }
-    posthog.capture(event, properties);
-  };
+  const track = useTrack();
 
   const captureOutboundClick = (
     event:
@@ -730,6 +720,7 @@ function Index() {
             <p className="mt-8 text-center">
               <Link
                 to="/blog"
+                onClick={() => track("home_blog_link_clicked", { placement: "blog_section" })}
                 className="font-extrabold text-ink underline decoration-brand-red decoration-4 underline-offset-4 hover:text-brand-red"
               >
                 See all posts →
@@ -814,6 +805,7 @@ function Index() {
             </button>
             <Link
               to="/blog"
+              onClick={() => track("home_blog_link_clicked", { placement: "footer" })}
               className="underline decoration-brand-red decoration-4 underline-offset-4 hover:text-brand-red"
             >
               Blog

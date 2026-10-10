@@ -32,7 +32,9 @@ async function api<T = Params>(path: string, options?: { method?: string; body?:
   });
   const data = (await response.json()) as Params & { id?: number; results?: T[] };
   if (!response.ok) {
-    throw new Error(`POSTHOG API ${response.status} ${path}: ${JSON.stringify(data).slice(0, 500)}`);
+    throw new Error(
+      `POSTHOG API ${response.status} ${path}: ${JSON.stringify(data).slice(0, 500)}`,
+    );
   }
   return data;
 }
@@ -55,7 +57,8 @@ if (dashboardId) {
     method: "POST",
     body: {
       name: DASHBOARD_NAME,
-      description: "Vetrina isarthingshop.com: traffico, click Vinted/Instagram, waiting list.",
+      description:
+        "Vetrina isarthingshop.com: traffico, click Vinted/Instagram, waiting list, blog.",
     },
   });
   dashboardId = created.id!;
@@ -85,18 +88,15 @@ const insights: InsightDef[] = [
   {
     name: "Visitatori",
     description: "Visitatori unici di isarthingshop.com",
-    query: trend(
-      [{ kind: "EventsNode", event: "$pageview", math: "dau" }],
-      "ActionsLineGraph",
-    ),
+    query: trend([{ kind: "EventsNode", event: "$pageview", math: "dau" }], "ActionsLineGraph"),
   },
   {
     name: "Click Vinted",
     description: "Click verso Vinted per punto di accesso (hero, carousel, card, footer)",
     query: trend(
       [
-        { kind: "EventsNode", event: "vinted_item_clicked", },
-        { kind: "EventsNode", event: "vinted_link_clicked", },
+        { kind: "EventsNode", event: "vinted_item_clicked" },
+        { kind: "EventsNode", event: "vinted_link_clicked" },
       ],
       "ActionsTable",
       { breakdown: "placement" },
@@ -107,9 +107,9 @@ const insights: InsightDef[] = [
     description: "a + b = click Vinted, c = visitatori unici",
     query: trend(
       [
-        { kind: "EventsNode", event: "vinted_item_clicked", math: "dau", },
-        { kind: "EventsNode", event: "vinted_link_clicked", math: "dau", },
-        { kind: "EventsNode", event: "$pageview", math: "dau", },
+        { kind: "EventsNode", event: "vinted_item_clicked", math: "dau" },
+        { kind: "EventsNode", event: "vinted_link_clicked", math: "dau" },
+        { kind: "EventsNode", event: "$pageview", math: "dau" },
       ],
       "ActionsLineGraph",
       { formula: "((a + b) / c) * 100" },
@@ -130,9 +130,9 @@ const insights: InsightDef[] = [
       dateRange: { date_from: "-30d" },
       interval: "day",
       series: [
-        { kind: "EventsNode", event: "waitlist_form_viewed", },
-        { kind: "EventsNode", event: "waitlist_submit_clicked", },
-        { kind: "EventsNode", event: "waitlist_joined", },
+        { kind: "EventsNode", event: "waitlist_form_viewed" },
+        { kind: "EventsNode", event: "waitlist_submit_clicked" },
+        { kind: "EventsNode", event: "waitlist_joined" },
       ],
     },
   },
@@ -141,8 +141,8 @@ const insights: InsightDef[] = [
     description: "Click verso Instagram per punto di accesso",
     query: trend(
       [
-        { kind: "EventsNode", event: "instagram_link_clicked", },
-        { kind: "EventsNode", event: "instagram_post_clicked", },
+        { kind: "EventsNode", event: "instagram_link_clicked" },
+        { kind: "EventsNode", event: "instagram_post_clicked" },
       ],
       "ActionsTable",
       { breakdown: "placement" },
@@ -151,24 +151,61 @@ const insights: InsightDef[] = [
   {
     name: "Click Vinted per prodotto",
     description: "Quale capo del carosello viene cliccato",
-    query: trend(
-      [{ kind: "EventsNode", event: "vinted_item_clicked" }],
-      "ActionsBarValue",
-      { breakdown: "product" },
-    ),
+    query: trend([{ kind: "EventsNode", event: "vinted_item_clicked" }], "ActionsBarValue", {
+      breakdown: "product",
+    }),
   },
   {
     name: "Traffico da Instagram",
     description: "Visitatori unici con utm_source = instagram",
+    query: trend([{ kind: "EventsNode", event: "$pageview", math: "dau" }], "ActionsLineGraph", {
+      properties: [{ key: "utm_source", type: "event", value: ["instagram"], operator: "exact" }],
+    }),
+  },
+  {
+    name: "Visite al blog",
+    description: "Visitatori unici per pagina del blog (elenco e singoli articoli)",
+    query: trend([{ kind: "EventsNode", event: "$pageview", math: "dau" }], "ActionsTable", {
+      breakdown: "$pathname",
+      properties: [{ key: "$pathname", type: "event", value: "/blog", operator: "icontains" }],
+    }),
+  },
+  {
+    name: "Dalla home al blog",
+    description: 'Click sull\'ultimo articolo in home e sui link "Blog" (sezione blog, footer)',
     query: trend(
-      [{ kind: "EventsNode", event: "$pageview", math: "dau" }],
-      "ActionsLineGraph",
+      [
+        { kind: "EventsNode", event: "home_blog_post_clicked" },
+        { kind: "EventsNode", event: "home_blog_link_clicked" },
+      ],
+      "ActionsBarValue",
+    ),
+  },
+  {
+    name: "Lettura articoli",
+    description: "Fino a che punto viene letto ogni articolo (25/50/75/100%)",
+    query: trend([{ kind: "EventsNode", event: "blog_post_read", math: "dau" }], "ActionsTable", {
+      breakdown: "percent",
+    }),
+  },
+  {
+    name: "Articoli più letti fino in fondo",
+    description: "Visitatori unici che arrivano al 100% di un articolo, per articolo",
+    query: trend(
+      [{ kind: "EventsNode", event: "blog_post_read", math: "dau" }],
+      "ActionsBarValue",
       {
-        properties: [
-          { key: "utm_source", type: "event", value: ["instagram"], operator: "exact" },
-        ],
+        breakdown: "slug",
+        properties: [{ key: "percent", type: "event", value: [100], operator: "exact" }],
       },
     ),
+  },
+  {
+    name: "Click sulle fonti del blog",
+    description: "Link esterni cliccati dentro gli articoli, per sito",
+    query: trend([{ kind: "EventsNode", event: "blog_link_clicked" }], "ActionsTable", {
+      breakdown: "domain",
+    }),
   },
 ];
 

@@ -33,6 +33,6 @@ Not ready to commit to a full sweater? Try stripes on something you carry instea
 
 ## The short version
 
-Stripes are fun, they're forgiving, and they're very easy to find second-hand. Every piece we pick is one-of-a-kind, so if one speaks to you, it won't be around forever.
+Stripes are fun, they're forgiving, and they're very easy to fall for. Every piece we pick is one-of-a-kind, so if one speaks to you, it won't be around forever.
 
 > Want first dibs? Join the waitlist on the homepage and we'll tell you about new drops **24 hours** before everyone else. 💛

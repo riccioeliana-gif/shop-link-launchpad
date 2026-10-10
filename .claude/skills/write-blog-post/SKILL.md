@@ -35,7 +35,7 @@ If a topic or sentence works against any of these, drop it.
 
 ## Voice
 
-Warm, playful, short sentences, a little bit loud, like a friend with great taste. Model it on `src/content/posts/stripes-are-back.md` (but don't copy its "second-hand" line). Write in English.
+Warm, playful, short sentences, a little bit loud, like a friend with great taste. Model it on `src/content/posts/welcome-to-isar-things.md`. Write in English.
 
 Do:
 - Talk to "you". Invite, never prescribe.

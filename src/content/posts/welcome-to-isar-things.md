@@ -1,47 +1,44 @@
 ---
-title: Welcome to Isar Things: a happy place made of colours
+title: No labels, just pieces you'll love: how Isar Things works
 date: 2026-10-09
-excerpt: Who we are, what we stand for, and why there are no "his" and "hers" sections here. Just colour, comfort, and pieces picked by hand for every body.
+excerpt: No "his" and "hers", no size drama, no endless restocks. Here's what makes this little shop tick, and the four rules behind every piece we pick.
 cover: club-amour-tshirt-red.webp
 ---
 
-Hi, and welcome! 💛 If you've just landed here, let us introduce ourselves.
+Hi! 👋 This is the very first "who are we" post, so let's skip the long intro and get straight to the good part: **how this shop actually works**, and why.
 
-**Isar Things Shop is a happy place made of colours.** A little corner where everyone is welcome, whoever they are, and where getting dressed is supposed to feel fun again.
+Isar Things Shop sells carefully selected, one-of-a-kind pieces: clothes, accessories and little treasures in a lot of colour. Everyone is welcome here. And we run it on four simple rules.
 
-## What we stand for
+## Rule 1: no "his" and "hers"
 
-We keep it simple. Six things guide every piece we pick and every word we write:
+You won't find a men's section or a women's section here. Ever. A cardigan is a cardigan. A striped tee is a striped tee. Whoever puts it on decides what it means.
 
-- **Everyone is welcome.** Whoever you are, wherever you're coming from. Come in.
-- **Clothes are clothes.** You won't find "for her" or "for him" here. A cardigan is a cardigan. Whoever wears it decides what it means.
-- **Your body, as it is.** Wear what feels good on you, now. Not after some "someday". Today.
-- **A safe place.** Somewhere you can feel at home, with no judgement and no pressure.
-- **Picked by hand, one by one.** Every piece is chosen with care, and most of them won't come again.
-- **How you choose to shop counts.** Slowly, thoughtfully, because you love it.
+So when you browse, you just see the pieces. Pick the one you like, full stop.
+
+## Rule 2: numbers, not promises
+
+Instead of telling you who a piece is "for", every listing tells you the facts: the fabric, the measurements, how it falls. You compare it with something you already own and love, and you know.
+
+No "flattering", no "fixes", no talk of perfect bodies. Your body is already the right one. The clothes are the ones that have to fit in.
 
 ![Person wearing a red "club amour" graphic t-shirt, holding a drink on the street](club-amour-tshirt-red.webp)
 
-## How we choose every piece
+## Rule 3: picked one by one
 
-First the colour. Then the feel of the fabric: is it soft, fuzzy, chunky, does it move nicely? And then one question: *would someone feel more like themselves in this?*
+Every piece passes the same little test. Colour first. Then the feel: fuzzy, soft, chunky, smooth? Then one question: *would someone feel more like themselves in this?*
 
-If the answer is yes, it stays. That's why there are only a few pieces of everything. (And yes, Echo checks every box too 🐾)
+Only the yeses stay. That's why there are just a few pieces of everything, and most of them won't come back once they're gone. (Echo checks every box too 🐾)
 
-In every listing we tell you the fabric, the measurements and how it falls. Never who it's "for". You don't have to fit the clothes. The clothes are here for you.
+## Rule 4: how you shop counts
+
+We'd rather you buy one thing you'll wear a hundred times than ten things you'll forget. Take your time. Ask questions. Choose slowly.
+
+![Two striped teddy-fleece makeup pouches stacked, one tan and black, one pink and red](striped-teddy-pouches.webp)
 
 ## Where to find us
 
-Our pieces live on Vinted, and the everyday stuff (new drops, behind the scenes, a lot of colour) happens on Instagram. Here on the blog we'll talk about style, comfort, the things that matter to us, and what's happening out there in the world of fashion for every body.
+All our pieces live in our Vinted shop, and the new drops land there first. Instagram is where we share the behind the scenes. And this blog is where we'll talk about style, colour, and what's happening in fashion for every body.
 
-![Beige teddy coat with small embroidered star, moon and heart](beige-teddy-coat-stars-moon.webp)
-
-Want a little taste? This beige teddy coat with its tiny embroidered star, moon and heart is pure cosy magic. Wear it however you like.
-
-[See the teddy coat on Vinted →](https://www.vinted.it/items/10265308294)
-
-## So, welcome home
-
-Grab a coffee, have a look around, and take whatever feels like *you*. We're really happy you're here.
+[Browse the whole shop on Vinted →](https://www.vinted.it/member/57442722)
 
 > Want first dibs? Join the waitlist on the homepage and we'll tell you about new drops **24 hours** before everyone else. 💛

@@ -41,3 +41,7 @@ We talked about this on Instagram too, and your comments there are part of the c
 And if you're the one having a hard time, you don't have to carry it alone. Reach out to someone you trust, or to a local support service near you. Talking is a brave thing to do.
 
 Be gentle with yourself today. You're welcome here, always. 💛
+
+---
+
+*Source: [World Federation for Mental Health](https://wfmh.global/news/2026.26-08-11_world-mental-health-day-2026), 11 August 2026.*

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ColorWords } from "./index";
+import { useTrack } from "@/lib/analytics";
 import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
 
 export const Route = createFileRoute("/blog/")({
@@ -21,6 +22,7 @@ const PIECE_COLORS = ["brand-pink", "brand-blue", "brand-yellow", "brand-purple"
 
 function BlogIndex() {
   const posts = getPosts();
+  const track = useTrack();
   return (
     <div className="min-h-screen bg-background px-4 pb-20 pt-10 font-body text-foreground sm:px-6">
       <div className="mx-auto max-w-2xl">
@@ -46,6 +48,7 @@ function BlogIndex() {
                 key={post.slug}
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
+                onClick={() => track("blog_post_clicked", { slug: post.slug, position: i + 1 })}
                 className="toy-piece block overflow-hidden rounded-[2.5rem] bg-card sm:flex"
                 style={{
                   ["--piece-border" as string]: "var(--ink)",

@@ -1,5 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
+import { useTrack } from "@/lib/analytics";
 import { formatPostDate, getPost, postImageUrl } from "@/lib/posts";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -39,9 +41,34 @@ export const Route = createFileRoute("/blog/$slug")({
 
 function BlogPost() {
   const { post } = Route.useLoaderData();
+  const track = useTrack();
+  const articleRef = useRef<HTMLElement>(null);
+
+  // How much of the article visitors read: fires once per threshold per post,
+  // measured on the article itself (100 = they reached the last line).
+  useEffect(() => {
+    const thresholds = [25, 50, 75, 100];
+    const reached = new Set<number>();
+    const onScroll = () => {
+      const article = articleRef.current;
+      if (!article) return;
+      const { top, height } = article.getBoundingClientRect();
+      const depth = ((window.innerHeight - top) / height) * 100;
+      for (const threshold of thresholds) {
+        if (depth >= threshold - 1 && !reached.has(threshold)) {
+          reached.add(threshold);
+          track("blog_post_read", { slug: post.slug, percent: threshold });
+        }
+      }
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [post.slug]);
+
   return (
     <div className="min-h-screen bg-background px-4 pb-20 pt-10 font-body text-foreground sm:px-6">
-      <article className="mx-auto max-w-2xl">
+      <article ref={articleRef} className="mx-auto max-w-2xl">
         <Link
           to="/blog"
           className="font-extrabold underline decoration-brand-yellow decoration-4 underline-offset-4 hover:text-brand-yellow-text"
@@ -78,6 +105,12 @@ function BlogPost() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() =>
+                    track("blog_link_clicked", {
+                      slug: post.slug,
+                      domain: linkDomain(href),
+                    })
+                  }
                   className="font-extrabold text-ink underline decoration-brand-pink decoration-4 underline-offset-4 hover:text-brand-pink-text"
                 >
                   {children}
@@ -108,4 +141,13 @@ function BlogPost() {
       </article>
     </div>
   );
+}
+
+// Only the site name of an outbound link (e.g. "vogue.com"), never the full URL.
+function linkDomain(href: string | undefined): string {
+  try {
+    return new URL(href ?? "", window.location.href).hostname.replace(/^www\./, "");
+  } catch {
+    return "unknown";
+  }
 }

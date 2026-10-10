@@ -766,6 +766,12 @@ function Index() {
               Cookies
             </button>
             <Link
+              to="/blog"
+              className="underline decoration-brand-red decoration-4 underline-offset-4 hover:text-brand-red"
+            >
+              Blog
+            </Link>
+            <Link
               to="/privacy"
               className="underline decoration-brand-green decoration-4 underline-offset-4 hover:text-brand-green"
             >

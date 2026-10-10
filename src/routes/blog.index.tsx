@@ -46,7 +46,7 @@ function BlogIndex() {
                 key={post.slug}
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="toy-piece block overflow-hidden rounded-[2.5rem] bg-card"
+                className="toy-piece block overflow-hidden rounded-[2.5rem] bg-card sm:flex"
                 style={{
                   ["--piece-border" as string]: "var(--ink)",
                   ["--piece-shadow" as string]: `var(--${color})`,
@@ -55,9 +55,9 @@ function BlogIndex() {
                 <img
                   src={postImageUrl(post.cover)}
                   alt=""
-                  className="aspect-[4/3] w-full border-b-[3px] border-ink object-cover"
+                  className="aspect-[4/5] w-full border-b-[3px] border-ink object-cover sm:w-2/5 sm:shrink-0 sm:border-b-0 sm:border-r-[3px]"
                 />
-                <div className="p-6 sm:p-8">
+                <div className="p-6 sm:self-center sm:p-8">
                   <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
                     {formatPostDate(post.date)}
                   </p>

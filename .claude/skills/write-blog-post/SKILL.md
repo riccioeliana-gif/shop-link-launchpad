@@ -70,12 +70,16 @@ title: ...
 date: YYYY-MM-DD   # today
 excerpt: one or two sentences for the blog list
 cover: some-photo.webp
+tags: two or three lowercase tags, comma-separated
 ---
 ```
 
-All four fields are required or the build fails.
+All five fields are required or the build fails.
+
+Reading time needs no field: the site computes it from the body (~200 words per minute). Don't add it yourself.
 
 Rules:
+- `tags`: 2–3 lowercase tags, comma-separated. Check the tags already used in existing posts in `src/content/posts/` and reuse their exact spelling before inventing a new one, so the same topic always shows the same chip.
 - `cover` and every `![alt](file.webp)` must be a filename that exists in `src/assets/carousel/`. Check with `ls`. Never invent one. Pick items from `src/data/carousel.csv` whose colours or mood fit the topic.
 - Every image needs real alt text that describes the photo.
 - Product links: copy the Vinted URL from the `link` column of `src/data/carousel.csv`. Never write one from memory. Only link items still in the CSV.

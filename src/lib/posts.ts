@@ -18,6 +18,7 @@ export type Post = {
   date: string;
   excerpt: string;
   cover: string;
+  tags: string[];
   body: string;
 };
 
@@ -37,8 +38,15 @@ function parsePost(slug: string, raw: string): Post {
     const i = line.indexOf(":");
     if (i > 0) meta[line.slice(0, i).trim()] = line.slice(i + 1).trim();
   }
-  for (const key of ["title", "date", "excerpt", "cover"]) {
+  for (const key of ["title", "date", "excerpt", "cover", "tags"]) {
     if (!meta[key]) throw new Error(`Post "${slug}" is missing "${key}" in its frontmatter.`);
+  }
+  const tags = meta.tags
+    .split(",")
+    .map((tag) => tag.trim().toLowerCase())
+    .filter(Boolean);
+  if (tags.length === 0) {
+    throw new Error(`Post "${slug}" has an empty "tags" frontmatter field.`);
   }
   return {
     slug,
@@ -46,6 +54,7 @@ function parsePost(slug: string, raw: string): Post {
     date: meta.date,
     excerpt: meta.excerpt,
     cover: meta.cover,
+    tags,
     body: match[2].trim(),
   };
 }
@@ -60,6 +69,12 @@ export function getPosts(): Post[] {
 
 export function getPost(slug: string): Post | undefined {
   return POSTS.find((post) => post.slug === slug);
+}
+
+// ~200 words per minute is a comfortable pace for this kind of short article.
+export function postReadingTime(post: Post): number {
+  const words = post.body.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
 }
 
 export function formatPostDate(date: string): string {

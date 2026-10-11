@@ -3,6 +3,7 @@ title: Feeling at home in your clothes (and in your day)
 date: 2026-10-10
 excerpt: Today is World Mental Health Day. A gentle note about listening, soft colours, and the small things that make a day feel a little more like home.
 cover: coral-fluffy-cardigan.webp
+tags: world mental health day, mental health, self care
 ---
 
 Today, 10 October, is **World Mental Health Day**. This year's theme, chosen by the World Federation for Mental Health, is *"Lived Experiences Heard: Real Voices, Real Change"*.

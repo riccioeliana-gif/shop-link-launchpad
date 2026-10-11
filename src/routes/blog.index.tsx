@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ColorWords } from "./index";
 import { useTrack } from "@/lib/analytics";
-import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
+import { formatPostDate, getPosts, postImageUrl, postReadingTime } from "@/lib/posts";
+import { tagChipClass } from "@/lib/tags";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -62,10 +63,20 @@ function BlogIndex() {
                 />
                 <div className="p-6 sm:self-center sm:p-8">
                   <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
-                    {formatPostDate(post.date)}
+                    {formatPostDate(post.date)} · {postReadingTime(post)} min read
                   </p>
                   <h2 className="mt-2 font-display text-2xl font-bold sm:text-3xl">{post.title}</h2>
                   <p className="mt-2 font-semibold text-muted-foreground">{post.excerpt}</p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`rounded-full border-2 border-ink px-3 py-0.5 text-[11px] font-extrabold tracking-wide ${tagChipClass(tag)}`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                   <span className="mt-4 inline-block text-sm font-extrabold text-ink">
                     Read more →
                   </span>

@@ -2,7 +2,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
 import { useTrack } from "@/lib/analytics";
-import { formatPostDate, getPost, postImageUrl } from "@/lib/posts";
+import { formatPostDate, getPost, postImageUrl, postReadingTime } from "@/lib/posts";
+import { tagChipClass } from "@/lib/tags";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -44,6 +45,12 @@ function BlogPost() {
   const track = useTrack();
   const articleRef = useRef<HTMLElement>(null);
 
+  // One explicit view event per post render, so views can be counted by slug
+  // without relying on the raw $pageview event.
+  useEffect(() => {
+    track("blog_post_viewed", { slug: post.slug });
+  }, [post.slug]);
+
   // How much of the article visitors read: fires once per threshold per post,
   // measured on the article itself (100 = they reached the last line).
   useEffect(() => {
@@ -77,9 +84,19 @@ function BlogPost() {
         </Link>
 
         <p className="mt-8 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
-          {formatPostDate(post.date)}
+          {formatPostDate(post.date)} · {postReadingTime(post)} min read
         </p>
         <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">{post.title}</h1>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {post.tags.map((tag) => (
+            <span
+              key={tag}
+              className={`rounded-full border-2 border-ink px-3 py-1 text-[11px] font-extrabold tracking-wide ${tagChipClass(tag)}`}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
 
         <div className="mt-8">
           <Markdown

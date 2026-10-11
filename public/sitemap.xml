@@ -17,6 +17,10 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://isarthingshop.com/waitlist</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://isarthingshop.com/privacy</loc>
     <changefreq>yearly</changefreq>
   </url>

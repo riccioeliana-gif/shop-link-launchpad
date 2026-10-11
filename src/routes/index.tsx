@@ -267,6 +267,10 @@ function Index() {
   const waitlistSectionRef = useRef<HTMLElement>(null);
   const latestPost = getPosts()[0];
   const autoplayPaused = useRef(false);
+  // Set once the visitor scrolls, swipes or uses the arrows in the gallery. Autoplay
+  // stays off until they scroll the page up or down again.
+  const galleryLocked = useRef(false);
+  const lockGallery = () => (galleryLocked.current = true);
 
   const scrollCarousel = (direction: 1 | -1) => {
     const track = trackRef.current;
@@ -284,9 +288,16 @@ function Index() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const timer = window.setInterval(() => {
-      if (!autoplayPaused.current && !document.hidden) scrollCarousel(1);
+      if (!autoplayPaused.current && !galleryLocked.current && !document.hidden) scrollCarousel(1);
     }, CAROUSEL_INTERVAL_MS);
     return () => window.clearInterval(timer);
+  }, []);
+
+  // Scrolling the page up or down hands control back to the autoplay.
+  useEffect(() => {
+    const unlockGallery = () => (galleryLocked.current = false);
+    window.addEventListener("scroll", unlockGallery, { passive: true });
+    return () => window.removeEventListener("scroll", unlockGallery);
   }, []);
 
   const track = useTrack();
@@ -418,6 +429,10 @@ function Index() {
             <div className="relative">
               <ul
                 ref={trackRef}
+                onWheel={lockGallery}
+                onTouchStart={lockGallery}
+                onPointerDown={lockGallery}
+                onKeyDown={lockGallery}
                 onTouchMove={() => trackCarouselInteraction("swipe")}
                 className="flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
@@ -552,6 +567,7 @@ function Index() {
                   key={direction}
                   type="button"
                   onClick={() => {
+                    lockGallery();
                     trackCarouselInteraction("arrow");
                     scrollCarousel(direction);
                   }}
@@ -757,16 +773,7 @@ function Index() {
           </div>
           <p className="font-display text-lg font-bold">
             <ColorWords
-              words={[
-                "A",
-                "safe",
-                "space,",
-                "bold",
-                "colors.",
-                "everyone's",
-                "welcome",
-                "here.",
-              ]}
+              words={["A", "safe", "space,", "bold", "colors.", "everyone's", "welcome", "here."]}
             />
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm font-extrabold">

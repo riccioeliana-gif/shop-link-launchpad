@@ -2,7 +2,7 @@
 title: No labels, just pieces you'll love: how Isar Things works
 date: 2026-10-09
 excerpt: No "his" and "hers", no size drama, no endless restocks. Here's what makes this little shop tick, and the four rules behind every piece we pick.
-cover: club-amour-tshirt-red.webp
+cover: woman-and-dachshund-illustration.webp
 ---
 
 Hi! 👋 This is the very first "who are we" post, so let's skip the long intro and get straight to the good part: **how this shop actually works**, and why.

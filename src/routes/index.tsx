@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Isar Things Shop — Clothes, things & little treasures",
+        title: "Isar Things Shop | Clothes, things & little treasures",
       },
       {
         name: "description",
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "Isar Things Shop — Clothes, things & little treasures",
+        content: "Isar Things Shop | Clothes, things & little treasures",
       },
       {
         property: "og:description",
@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:image:alt",
-        content: "Isar Things Shop — Clothes, things & little treasures",
+        content: "Isar Things Shop | Clothes, things & little treasures",
       },
       { name: "twitter:card", content: "summary_large_image" },
       {
@@ -153,7 +153,7 @@ function WaitlistForm({
         error instanceof z.ZodError || (error instanceof Error && /email/i.test(error.message));
       onEvent?.("waitlist_error", { reason: invalidEmail ? "invalid_email" : "server" });
       const message = invalidEmail
-        ? "Hmm, that email doesn't look right — mind checking it?"
+        ? "Hmm, that email doesn't look right. Mind checking it?"
         : "Something went wrong. Please try again in a moment!";
       setState({ status: "error", message });
     }
@@ -218,7 +218,7 @@ function WaitlistForm({
         See new drops 24 hours before everyone else
       </h2>
       <p className="mx-auto mt-2 max-w-sm font-semibold text-muted-foreground">
-        Sign up and we'll send you first access to new treasures — no spam, just early dibs on the
+        Sign up and we'll send you first access to new treasures. No spam, just early dibs on the
         good stuff.
       </p>
       <form
@@ -380,7 +380,7 @@ function Index() {
               ))}
             </h1>
             <p className="mt-5 max-w-md text-lg font-semibold text-muted-foreground">
-              Most pieces come in just one size, one color — some, only one exists at all.
+              Most pieces come in just one size, one color. Some, only one exists at all.
             </p>
             <div className="mt-8 flex flex-nowrap items-center gap-3">
               <a
@@ -572,7 +572,7 @@ function Index() {
             <ColorWords words={["Shop,", "follow", "or", "say", "hi"]} />
           </h2>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
-            {/* Square — Vinted */}
+            {/* Square: Vinted */}
             <a
               href={VINTED_URL}
               target="_blank"
@@ -609,7 +609,7 @@ function Index() {
               </span>
             </a>
 
-            {/* Circle — Instagram */}
+            {/* Circle: Instagram */}
             <a
               href={INSTAGRAM_URL}
               target="_blank"
@@ -646,7 +646,7 @@ function Index() {
               </span>
             </a>
 
-            {/* Star — Say hello */}
+            {/* Star: Say hello */}
             <a
               href={`mailto:${EMAIL}`}
               onClick={() => captureOutboundClick("contact_email_clicked", "content_card")}
@@ -674,7 +674,7 @@ function Index() {
                 Say hello
               </h3>
               <p className="mt-2 font-semibold text-muted-foreground">
-                Questions, size checks or just a hi — we reply with a smile.
+                Questions, size checks or just a hi. We reply with a smile.
               </p>
               <span className="mt-4 inline-block break-all text-sm font-extrabold text-ink">
                 {EMAIL} →
@@ -762,8 +762,7 @@ function Index() {
                 "safe",
                 "space,",
                 "bold",
-                "colors",
-                "—",
+                "colors.",
                 "everyone's",
                 "welcome",
                 "here.",

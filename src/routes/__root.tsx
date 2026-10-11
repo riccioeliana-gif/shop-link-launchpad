@@ -38,7 +38,7 @@ function NotFoundComponent() {
       </h1>
       <h2 className="mt-4 font-display text-2xl font-bold">This page wandered off…</h2>
       <p className="mt-2 max-w-sm text-center text-sm font-semibold text-muted-foreground">
-        The page you're looking for doesn't exist — maybe it already found a new home. But there are
+        The page you're looking for doesn't exist. Maybe it already found a new home. But there are
         plenty of things waiting for you in the shop.
       </p>
       <Link

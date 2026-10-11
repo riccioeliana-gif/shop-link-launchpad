@@ -28,7 +28,7 @@ async function notifyOwner(email: string): Promise<void> {
   const apiKey = env?.["RESEND_API_KEY"] as string | undefined;
   const ownerEmail = env?.["OWNER_EMAIL"] as string | undefined;
   if (!apiKey || !ownerEmail) {
-    console.warn("RESEND_API_KEY/OWNER_EMAIL not set — owner notification skipped");
+    console.warn("RESEND_API_KEY/OWNER_EMAIL not set. Owner notification skipped.");
     return;
   }
   try {
@@ -60,7 +60,7 @@ export const joinWaitlist = createServerFn({ method: "POST" })
     if (!kv) {
       // KV binding missing (e.g. `vite dev` without the wrangler proxy):
       // keep the UX positive but make the situation visible in logs.
-      console.warn("WAITLIST KV binding not available — email not stored");
+      console.warn("WAITLIST KV binding not available. Email not stored.");
       return { ok: true as const };
     }
     // Key includes a timestamp so re-subscribing doesn't overwrite history.

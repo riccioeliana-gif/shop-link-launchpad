@@ -26,7 +26,7 @@ jobs:
       - name: Commit fixes
         run: |
           if git diff --quiet src/data/carousel.csv; then
-            echo "No stale Vinted links — nothing to commit."
+            echo "No stale Vinted links. Nothing to commit."
           else
             git config user.name "vinted-sync bot"
             git config user.email "actions@github.com"

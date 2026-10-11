@@ -3,7 +3,7 @@ import { ColorWords } from "./index";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy Policy — Isar Things Shop" },
+      { title: "Privacy Policy | Isar Things Shop" },
       {
         name: "description",
         content:
@@ -50,7 +50,7 @@ function PrivacyPage() {
           </p>
           <p>
             <strong className="text-ink">Waitlist:</strong> if you join, we keep your email to tell
-            you when new treasures arrive. Nothing else — no newsletters you didn't ask for, and you
+            you when new treasures arrive. Nothing else: no newsletters you didn't ask for, and you
             can unsubscribe any time.
           </p>
           <p>
@@ -62,14 +62,14 @@ function PrivacyPage() {
         <Section title="What we don't do">
           <p>
             No ads. No selling or renting your data. No tracking you across other websites. No dark
-            patterns — the cookie banner means what it says.
+            patterns. The cookie banner means what it says.
           </p>
         </Section>
 
         <Section title="Your choices">
           <p>
             You can change your cookie decision any time via the “Cookies” link in the footer of the
-            homepage. You can also ask us to delete your waitlist email — just write to{" "}
+            homepage. You can also ask us to delete your waitlist email. Just write to{" "}
             <a
               href="mailto:hello@isarthingshop.com"
               className="font-extrabold text-ink underline decoration-brand-purple decoration-4 underline-offset-4 hover:text-brand-purple-text"

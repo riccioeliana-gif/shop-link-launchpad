@@ -6,12 +6,12 @@ import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
 export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
-      { title: "Blog — Isar Things Shop" },
+      { title: "Blog | Isar Things Shop" },
       {
         name: "description",
         content: "Trends, styling ideas and little treasures from Isar Things Shop.",
       },
-      { property: "og:title", content: "Blog — Isar Things Shop" },
+      { property: "og:title", content: "Blog | Isar Things Shop" },
       { property: "og:url", content: "https://isarthingshop.com/blog" },
     ],
   }),

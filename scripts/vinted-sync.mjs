@@ -183,10 +183,10 @@ async function main() {
     results.set(id, result);
     console.log(
       result.live
-        ? `  ✓ ${id} — ${result.title.replace(" | Vinted", "")}`
+        ? `  ✓ ${id}: ${result.title.replace(" | Vinted", "")}`
         : result.live === false
-          ? `  ✗ ${id} — DEAD (HTTP ${result.status})`
-          : `  ? ${id} — UNKNOWN (HTTP ${result.status}${result.error ? `, ${result.error}` : ""}) — skipped, link untouched`,
+          ? `  ✗ ${id}: DEAD (HTTP ${result.status})`
+          : `  ? ${id}: UNKNOWN (HTTP ${result.status}${result.error ? `, ${result.error}` : ""}): skipped, link untouched`,
     );
     if (result.live === null) unknownCount++;
     const delay = REQUEST_DELAY_MS + Math.random() * REQUEST_JITTER_MS;
@@ -218,7 +218,7 @@ async function main() {
   if (deadIds.size === 0) {
     if (unknownCount > 0) {
       console.log(
-        `\n⚠ ${unknownCount} link(s) could not be verified (rate limit or network). No changes will be made — run again later.`,
+        `\n⚠ ${unknownCount} link(s) could not be verified (rate limit or network). No changes will be made: run again later.`,
       );
     } else {
       console.log("\n✓ All Vinted links are live. Nothing to do.");
@@ -230,17 +230,17 @@ async function main() {
     // Refuse to rewrite anything while the run was only partially verified:
     // a rate-limited or captcha-blocked fetch must never break a live link.
     console.log(
-      `\n⚠ ${unknownCount} link(s) could not be verified. Aborting without changes — retry later or run npm run vinted-sync to re-check.`,
+      `\n⚠ ${unknownCount} link(s) could not be verified. Aborting without changes: retry later or run npm run vinted-sync to re-check.`,
     );
     return;
   }
 
   console.log(
-    `\n${deadIds.size} item link(s) are sold/removed — new link would be: ${profileLink}`,
+    `\n${deadIds.size} item link(s) are sold/removed. New link would be: ${profileLink}`,
   );
   for (const id of deadIds) {
     const inPosts = postRefs.get(id) ?? [];
-    console.log(`  • ${id}${inPosts.length ? ` — also used in ${inPosts.join(", ")}` : ""}`);
+    console.log(`  • ${id}${inPosts.length ? `: also used in ${inPosts.join(", ")}` : ""}`);
   }
 
   if (!APPLY) {

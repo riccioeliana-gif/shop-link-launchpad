@@ -25,12 +25,12 @@ jobs:
 
       - name: Commit fixes
         run: |
-          if git diff --quiet src/data/carousel.csv; then
+          if git diff --quiet src/data/carousel.csv src/content/posts; then
             echo "No stale Vinted links. Nothing to commit."
           else
             git config user.name "vinted-sync bot"
             git config user.email "actions@github.com"
-            git add src/data/carousel.csv
+            git add src/data/carousel.csv src/content/posts
             git commit -m "vinted-sync: point sold item links to profile"
             git push
           fi

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import Markdown from "react-markdown";
-import { useTrack } from "@/lib/analytics";
+import { useScrollDepth, useTrack } from "@/lib/analytics";
 import { formatPostDate, getPost, postImageUrl, postReadingTime } from "@/lib/posts";
 import { tagChipClass } from "@/lib/tags";
 
@@ -53,25 +53,10 @@ function BlogPost() {
 
   // How much of the article visitors read: fires once per threshold per post,
   // measured on the article itself (100 = they reached the last line).
-  useEffect(() => {
-    const thresholds = [25, 50, 75, 100];
-    const reached = new Set<number>();
-    const onScroll = () => {
-      const article = articleRef.current;
-      if (!article) return;
-      const { top, height } = article.getBoundingClientRect();
-      const depth = ((window.innerHeight - top) / height) * 100;
-      for (const threshold of thresholds) {
-        if (depth >= threshold - 1 && !reached.has(threshold)) {
-          reached.add(threshold);
-          track("blog_post_read", { slug: post.slug, percent: threshold });
-        }
-      }
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [post.slug]);
+  useScrollDepth((percent) => track("blog_post_read", { slug: post.slug, percent }), {
+    target: articleRef,
+    resetKey: post.slug,
+  });
 
   return (
     <div className="min-h-screen bg-background px-4 pb-20 pt-10 font-body text-foreground sm:px-6">

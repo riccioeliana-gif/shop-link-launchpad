@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
+import type { Track } from "@/lib/analytics";
 import { joinWaitlist } from "@/lib/waitlist";
 
 export type WaitlistState =
@@ -13,10 +14,7 @@ export function WaitlistForm({
   onEvent,
 }: {
   onJoin: (email: string) => void;
-  onEvent?: (
-    event: "waitlist_submit_clicked" | "waitlist_error",
-    properties?: Record<string, string>,
-  ) => void;
+  onEvent?: Track;
 }) {
   const [state, setState] = useState<WaitlistState>({ status: "idle" });
   const [email, setEmail] = useState("");

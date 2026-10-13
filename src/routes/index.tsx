@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { useTrack } from "@/lib/analytics";
+import { useScrollDepth, useTrack } from "@/lib/analytics";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { openCookieBanner } from "@/lib/consent";
 import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
@@ -124,17 +124,6 @@ function Index() {
 
   const track = useTrack();
 
-  const captureOutboundClick = (
-    event:
-      | "instagram_link_clicked"
-      | "instagram_post_clicked"
-      | "vinted_item_clicked"
-      | "vinted_link_clicked"
-      | "contact_email_clicked",
-    placement: "hero" | "carousel" | "content_card" | "footer",
-    properties?: Record<string, string | number>,
-  ) => track(event, { placement, ...properties });
-
   // First time a visitor reaches the email form, so PostHog can compare
   // waitlist form views against actual signups.
   useEffect(() => {
@@ -165,22 +154,7 @@ function Index() {
   };
 
   // How far down the page visitors get: fires once per threshold per page view.
-  useEffect(() => {
-    const thresholds = [25, 50, 75, 100];
-    const reached = new Set<number>();
-    const onScroll = () => {
-      const { scrollHeight } = document.documentElement;
-      const depth = ((window.scrollY + window.innerHeight) / scrollHeight) * 100;
-      for (const threshold of thresholds) {
-        if (depth >= threshold - 1 && !reached.has(threshold)) {
-          reached.add(threshold);
-          track("scroll_depth", { percent: threshold });
-        }
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  useScrollDepth((percent) => track("scroll_depth", { percent }));
 
   return (
     <div className="tile-page min-h-screen overflow-x-hidden bg-background font-body text-foreground">
@@ -220,7 +194,7 @@ function Index() {
                 href={VINTED_URL}
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => captureOutboundClick("vinted_link_clicked", "hero")}
+                onClick={() => track("vinted_link_clicked", { placement: "hero" })}
                 className="toy-block whitespace-nowrap rounded-2xl border-2 border-brand-pink bg-brand-pink px-4 py-2.5 text-sm font-extrabold text-ink sm:px-5 sm:py-3 sm:text-base"
                 style={{ ["--block-shadow" as string]: "var(--brand-pink-text)" }}
               >
@@ -230,7 +204,7 @@ function Index() {
                 href={INSTAGRAM_URL}
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => captureOutboundClick("instagram_link_clicked", "hero")}
+                onClick={() => track("instagram_link_clicked", { placement: "hero" })}
                 className="whitespace-nowrap rounded-2xl border-2 border-brand-yellow bg-card px-4 py-2.5 text-sm font-extrabold text-ink underline decoration-brand-yellow decoration-4 underline-offset-4 transition-colors hover:bg-muted sm:px-5 sm:py-3 sm:text-base"
               >
                 Follow on Instagram
@@ -270,18 +244,19 @@ function Index() {
                         target="_blank"
                         rel="noreferrer"
                         onClick={() => {
-                          const isVinted = item.kind === "vinted";
-                          captureOutboundClick(
-                            isVinted ? "vinted_item_clicked" : "instagram_post_clicked",
-                            "carousel",
-                            isVinted
-                              ? {
-                                  post_index: index + 1,
-                                  photo: item.id,
-                                  ...(item.product ? { product: item.product } : {}),
-                                }
-                              : { post_index: index + 1, photo: item.id },
-                          );
+                          const click = {
+                            placement: "carousel",
+                            post_index: index + 1,
+                            photo: item.id,
+                          } as const;
+                          if (item.kind === "vinted") {
+                            track("vinted_item_clicked", {
+                              ...click,
+                              ...(item.product ? { product: item.product } : {}),
+                            });
+                          } else {
+                            track("instagram_post_clicked", click);
+                          }
                         }}
                         className={`toy-piece block w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] overflow-hidden rounded-[2rem] bg-card ${index % 2 === 0 ? "-rotate-1" : "rotate-1"}`}
                         style={{
@@ -313,7 +288,7 @@ function Index() {
                     href={VINTED_URL}
                     target="_blank"
                     rel="noreferrer"
-                    onClick={() => captureOutboundClick("vinted_link_clicked", "carousel")}
+                    onClick={() => track("vinted_link_clicked", { placement: "carousel" })}
                     className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-4 rounded-[2rem] bg-brand-pink p-6 text-center"
                     style={{
                       ["--piece-border" as string]: "var(--ink)",
@@ -348,7 +323,7 @@ function Index() {
                     href={INSTAGRAM_URL}
                     target="_blank"
                     rel="noreferrer"
-                    onClick={() => captureOutboundClick("instagram_link_clicked", "carousel")}
+                    onClick={() => track("instagram_link_clicked", { placement: "carousel" })}
                     className="toy-piece flex aspect-[4/5] w-full max-w-[19rem] sm:max-w-[24rem] lg:max-w-[28rem] flex-col items-center justify-center gap-4 rounded-[2rem] bg-brand-yellow p-6 text-center"
                     style={{
                       ["--piece-border" as string]: "var(--ink)",
@@ -415,7 +390,7 @@ function Index() {
               href={VINTED_URL}
               target="_blank"
               rel="noreferrer"
-              onClick={() => captureOutboundClick("vinted_link_clicked", "content_card")}
+              onClick={() => track("vinted_link_clicked", { placement: "content_card" })}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
               style={{
                 ["--piece-border" as string]: "var(--brand-pink)",
@@ -452,7 +427,7 @@ function Index() {
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer"
-              onClick={() => captureOutboundClick("instagram_link_clicked", "content_card")}
+              onClick={() => track("instagram_link_clicked", { placement: "content_card" })}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
               style={{
                 ["--piece-border" as string]: "var(--brand-yellow)",
@@ -487,7 +462,7 @@ function Index() {
             {/* Star: Say hello */}
             <a
               href={`mailto:${EMAIL}`}
-              onClick={() => captureOutboundClick("contact_email_clicked", "content_card")}
+              onClick={() => track("contact_email_clicked", { placement: "content_card" })}
               className="toy-piece group rounded-[2.5rem] bg-card p-8 text-center"
               style={{
                 ["--piece-border" as string]: "var(--brand-purple)",
@@ -609,7 +584,7 @@ function Index() {
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer"
-              onClick={() => captureOutboundClick("instagram_link_clicked", "footer")}
+              onClick={() => track("instagram_link_clicked", { placement: "footer" })}
               className="text-ink underline decoration-brand-yellow decoration-4 underline-offset-4 hover:text-brand-yellow-text"
             >
               Instagram
@@ -618,14 +593,14 @@ function Index() {
               href={VINTED_URL}
               target="_blank"
               rel="noreferrer"
-              onClick={() => captureOutboundClick("vinted_link_clicked", "footer")}
+              onClick={() => track("vinted_link_clicked", { placement: "footer" })}
               className="text-ink underline decoration-brand-pink decoration-4 underline-offset-4 hover:text-brand-pink-text"
             >
               Vinted
             </a>
             <a
               href={`mailto:${EMAIL}`}
-              onClick={() => captureOutboundClick("contact_email_clicked", "footer")}
+              onClick={() => track("contact_email_clicked", { placement: "footer" })}
               className="underline decoration-brand-purple decoration-4 underline-offset-4 hover:text-brand-purple-text"
             >
               {EMAIL}

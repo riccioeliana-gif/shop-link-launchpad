@@ -2,8 +2,11 @@
 title: Wear a little purple this Thursday: it's Spirit Day
 date: 2026-10-13
 excerpt: On Thursday 15 October people everywhere wear purple for LGBTQ+ young people and against bullying. Here's why we're joining in, and how you can too, your way.
+cover: spirit-day-wear-purple.webp
 tags: spirit day, inclusivity, lgbtq+
 ---
+
+![Purple text on a yellow and lilac grid: "Wear a little purple this Thursday: it's Spirit Day"](spirit-day-wear-purple.webp)
 
 Got anything purple? Keep it close. This **Thursday, 15 October**, is **Spirit Day**.
 

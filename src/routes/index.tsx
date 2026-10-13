@@ -572,11 +572,13 @@ function Index() {
                 ["--piece-shadow" as string]: "var(--brand-yellow)",
               }}
             >
-              <img
-                src={postImageUrl(latestPost.cover)}
-                alt=""
-                className="aspect-[4/5] w-full border-b-[3px] border-ink object-cover sm:w-2/5 sm:shrink-0 sm:border-b-0 sm:border-r-[3px]"
-              />
+              {latestPost.cover && (
+                <img
+                  src={postImageUrl(latestPost.cover)}
+                  alt=""
+                  className="aspect-[4/5] w-full border-b-[3px] border-ink object-cover sm:w-2/5 sm:shrink-0 sm:border-b-0 sm:border-r-[3px]"
+                />
+              )}
               <div className="p-6 sm:self-center sm:p-8">
                 <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
                   {formatPostDate(latestPost.date)}

@@ -2,7 +2,6 @@
 title: Wear a little purple this Thursday: it's Spirit Day
 date: 2026-10-13
 excerpt: On Thursday 15 October people everywhere wear purple for LGBTQ+ young people and against bullying. Here's why we're joining in, and how you can too, your way.
-cover: lilac-ceramic-jewellery-tray.webp
 tags: spirit day, inclusivity, lgbtq+
 ---
 
@@ -32,9 +31,7 @@ There's no dress code. No rules. Just a few ideas:
 - **Share it.** A photo, a story, a word to a friend. Seeing other people join in matters, especially for young people.
 - **Be the safe person.** If you see someone being picked on, stand next to them. That's the real outfit.
 
-![Lilac ceramic trinket dish with red flowers holding two enamel pins on a pink table](lilac-ceramic-jewellery-tray.webp)
-
-Our purple-ish pick this week is not even something you wear: this little lilac jewellery tray with red flowers is where your pins and rings can live the other 364 days of the year. A small, happy reminder on your shelf.
+Our purple-ish pick this week is not even something you wear: our little lilac jewellery tray with red flowers is where your pins and rings can live the other 364 days of the year. A small, happy reminder on your shelf.
 
 [See the lilac jewellery tray on Vinted →](https://www.vinted.it/items/10240411151-lilac-ceramic-jewellery-tray-red-flowers-trinket-dish-ring-dish-new-with-tags-never-used)
 

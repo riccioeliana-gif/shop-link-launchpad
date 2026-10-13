@@ -69,12 +69,12 @@ Create `src/content/posts/<slug>.md`. The filename (kebab-case, no date) is the 
 title: ...
 date: YYYY-MM-DD   # today
 excerpt: one or two sentences for the blog list
-cover: some-photo.webp
+cover: some-photo.webp   # optional
 tags: two or three lowercase tags, comma-separated
 ---
 ```
 
-All five fields are required or the build fails.
+Title, date, excerpt and tags are required or the build fails. `cover` is optional: leave it out (and add no inline images) when the user asks for a post without photos; the blog and home cards then show text only.
 
 Reading time needs no field: the site computes it from the body (~200 words per minute). Don't add it yourself.
 

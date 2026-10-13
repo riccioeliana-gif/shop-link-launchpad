@@ -56,11 +56,13 @@ function BlogIndex() {
                   ["--piece-shadow" as string]: `var(--${color})`,
                 }}
               >
-                <img
-                  src={postImageUrl(post.cover)}
-                  alt=""
-                  className="aspect-[4/5] w-full border-b-[3px] border-ink object-cover sm:w-2/5 sm:shrink-0 sm:border-b-0 sm:border-r-[3px]"
-                />
+                {post.cover && (
+                  <img
+                    src={postImageUrl(post.cover)}
+                    alt=""
+                    className="aspect-[4/5] w-full border-b-[3px] border-ink object-cover sm:w-2/5 sm:shrink-0 sm:border-b-0 sm:border-r-[3px]"
+                  />
+                )}
                 <div className="p-6 sm:self-center sm:p-8">
                   <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
                     {formatPostDate(post.date)} · {postReadingTime(post)} min read

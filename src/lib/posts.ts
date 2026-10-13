@@ -1,6 +1,6 @@
 // Blog posts live as markdown files in src/content/posts/. Each file starts
-// with a small frontmatter block (title, date, excerpt, cover) and the slug
-// is the filename. Cover and inline images are filenames from
+// with a small frontmatter block (title, date, excerpt, tags and an optional
+// cover) and the slug is the filename. Cover and inline images are filenames from
 // src/assets/carousel/, so the same photos can be reused in posts.
 const postFiles = import.meta.glob<string>("../content/posts/*.md", {
   query: "?raw",
@@ -17,7 +17,7 @@ export type Post = {
   title: string;
   date: string;
   excerpt: string;
-  cover: string;
+  cover?: string;
   tags: string[];
   body: string;
 };
@@ -38,7 +38,7 @@ function parsePost(slug: string, raw: string): Post {
     const i = line.indexOf(":");
     if (i > 0) meta[line.slice(0, i).trim()] = line.slice(i + 1).trim();
   }
-  for (const key of ["title", "date", "excerpt", "cover", "tags"]) {
+  for (const key of ["title", "date", "excerpt", "tags"]) {
     if (!meta[key]) throw new Error(`Post "${slug}" is missing "${key}" in its frontmatter.`);
   }
   const tags = meta.tags
@@ -53,7 +53,7 @@ function parsePost(slug: string, raw: string): Post {
     title: meta.title,
     date: meta.date,
     excerpt: meta.excerpt,
-    cover: meta.cover,
+    cover: meta.cover || undefined,
     tags,
     body: match[2].trim(),
   };

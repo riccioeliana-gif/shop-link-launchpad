@@ -1,8 +1,10 @@
 // Tiny RFC4180-ish CSV parser: no dependency needed for the small data files
 // under src/data/ (carousel items, site links). Supports quoted fields,
 // commas/quotes inside quotes (""), and \r\n or \n line endings.
+// scripts/vinted-sync.mjs imports this file directly with Node, so keep it
+// free of imports and of TypeScript-only syntax beyond type annotations.
 export function parseCsv(text: string): Record<string, string>[] {
-  const rows = splitCsvRows(text);
+  const rows = parseCsvRows(text);
   if (rows.length === 0) return [];
   const [header, ...body] = rows;
   return body
@@ -10,7 +12,8 @@ export function parseCsv(text: string): Record<string, string>[] {
     .map((row) => Object.fromEntries(header.map((key, i) => [key.trim(), (row[i] ?? "").trim()])));
 }
 
-function splitCsvRows(text: string): string[][] {
+/** Rows as arrays of raw cells, header row included. Blank lines are skipped. */
+export function parseCsvRows(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
   let field = "";
@@ -53,4 +56,11 @@ function splitCsvRows(text: string): string[][] {
   }
   if (field !== "" || row.length > 0) pushRow();
   return rows;
+}
+
+/** Serialize rows back to CSV, quoting only where necessary. */
+export function stringifyCsv(rows: string[][]): string {
+  const escape = (value: string) =>
+    /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+  return rows.map((row) => row.map(escape).join(",")).join("\n") + "\n";
 }

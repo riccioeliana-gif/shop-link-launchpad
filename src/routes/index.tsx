@@ -3,11 +3,9 @@ import { useEffect, useRef } from "react";
 import { useTrack } from "@/lib/analytics";
 import { WaitlistForm } from "@/components/waitlist-form";
 import { openCookieBanner } from "@/lib/consent";
-import { parseCsv } from "@/lib/csv";
 import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
+import { CAROUSEL_ITEMS, SHOP_LINKS } from "@/lib/shop";
 import logoUrl from "@/assets/isar-logo-clear.webp";
-import linksCsv from "@/data/links.csv?raw";
-import carouselCsv from "@/data/carousel.csv?raw";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,42 +47,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// Site-wide links, editable in src/data/links.csv.
-const LINKS = Object.fromEntries(parseCsv(linksCsv).map((row) => [row.key, row.value])) as Record<
-  "instagram" | "vinted" | "email",
-  string
->;
-
-const INSTAGRAM_URL = LINKS.instagram;
-const VINTED_URL = LINKS.vinted;
-const EMAIL = LINKS.email;
-
-// Carousel photos, editable in src/data/carousel.csv. Photos live in
-// src/assets/carousel/ and are matched to CSV rows by filename.
-const carouselImages = import.meta.glob<{ default: string }>("../assets/carousel/*.webp", {
-  eager: true,
-});
-function carouselImageUrl(filename: string): string {
-  const entry = Object.entries(carouselImages).find(([path]) => path.endsWith(`/${filename}`));
-  if (!entry) {
-    throw new Error(
-      `carousel.csv references "${filename}", but no such file exists in src/assets/carousel/.`,
-    );
-  }
-  return entry[1].default;
-}
-
-// `product` groups Vinted clicks by item even when two photos show the same
-// piece (e.g. the product shot and the "worn" shot). Only Vinted links have it.
-type CarouselItem = { id: string; src: string; alt: string; href: string; product?: string };
-
-const CAROUSEL_ITEMS: CarouselItem[] = parseCsv(carouselCsv).map((row) => ({
-  id: row.id ?? "",
-  src: carouselImageUrl(row.image ?? ""),
-  alt: row.alt ?? "",
-  href: row.link === "instagram" ? INSTAGRAM_URL : (row.link ?? ""),
-  ...(row.product ? { product: row.product } : {}),
-}));
+const INSTAGRAM_URL = SHOP_LINKS.instagram;
+const VINTED_URL = SHOP_LINKS.vinted;
+const EMAIL = SHOP_LINKS.email;
 
 const HEADLINE_INTRO = ["A", "colorful", "corner", "where", "nothing", "is", "ordinary."];
 const HEADLINE_LINES = ["Including you."];
@@ -305,7 +270,7 @@ function Index() {
                         target="_blank"
                         rel="noreferrer"
                         onClick={() => {
-                          const isVinted = item.href.includes("vinted.");
+                          const isVinted = item.kind === "vinted";
                           captureOutboundClick(
                             isVinted ? "vinted_item_clicked" : "instagram_post_clicked",
                             "carousel",

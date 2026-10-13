@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ColorWords } from "./index";
+import { SHOP_LINKS } from "@/lib/shop";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
@@ -71,10 +72,10 @@ function PrivacyPage() {
             You can change your cookie decision any time via the “Cookies” link in the footer of the
             homepage. You can also ask us to delete your waitlist email. Just write to{" "}
             <a
-              href="mailto:hello@isarthingshop.com"
+              href={`mailto:${SHOP_LINKS.email}`}
               className="font-extrabold text-ink underline decoration-brand-purple decoration-4 underline-offset-4 hover:text-brand-purple-text"
             >
-              hello@isarthingshop.com
+              {SHOP_LINKS.email}
             </a>
             .
           </p>

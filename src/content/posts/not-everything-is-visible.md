@@ -2,7 +2,7 @@
 title: Not everything is visible
 date: 2026-10-16
 excerpt: Invisible Disabilities Week starts on Sunday. A gentle note about comfort first, easy pieces, and the fact that nobody owes anyone an explanation.
-cover: pink-teddy-vest.webp
+cover: pink-teddy-makeup-bag-bangles.webp
 tags: invisible disabilities week, inclusivity, self care
 ---
 
@@ -28,11 +28,11 @@ No rules here, just a few gentle ideas for the days that need them:
 - **Keep the good stuff close.** A small pouch for whatever you need to have with you, so it's always in reach.
 - **Wear what works for you.** Not for anyone else's idea of a "look".
 
-![Pink teddy-fleece sleeveless vest with snap buttons on a hanger](pink-teddy-vest.webp)
+![Fuchsia teddy-fleece Gimme makeup bag with two striped resin bangles in pink, red and olive](pink-teddy-makeup-bag-bangles.webp)
 
-This pink teddy vest is the kind of piece we mean: soft as a blanket, snap buttons instead of fiddly ones, and no sleeves to get in the way. Layer it over anything, wear it however you like.
+This fuchsia teddy bag is the kind of thing we mean: soft as a blanket, big enough for whatever you like to keep close, and easy to grab on your way out. It comes with two striped bangles, because a little colour helps too.
 
-[See the pink teddy vest on Vinted →](https://www.vinted.it/items/10265533740-pink-sleeveless-vest-gilet-lxl-new)
+[See the pink teddy bag on Vinted →](https://www.vinted.it/items/10370631157-bundle-gimme-pink-teddy-make-up-bag-2-striped-bangles)
 
 ## A little kindness goes far
 

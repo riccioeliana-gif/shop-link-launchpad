@@ -93,21 +93,16 @@ Before finishing, search the file for "second" and rewrite any hit.
 
 ## Housekeeping
 
-1. Add the post to `public/sitemap.xml`:
-   ```
-   <url>
-     <loc>https://isarthingshop.com/blog/<slug></loc>
-     <changefreq>monthly</changefreq>
-   </url>
-   ```
-2. Run the build and make sure it passes (`bun run build`, or `npm run build`). A missing image or frontmatter field fails here.
+1. Run the build and make sure it passes (`bun run build`, or `npm run build`). A missing image or frontmatter field fails here.
+
+The sitemap (`/sitemap.xml`) is built from the posts automatically; there is nothing to add.
 
 ## Publish through a pull request
 
 Pushing to `main` deploys the live site immediately and syncs to Lovable, so **never push to `main`**.
 
 1. `git checkout -b blog/<slug>` from an up-to-date `main`.
-2. Commit the post and the sitemap change.
+2. Commit the post.
 3. Push the branch and open a PR. In the description list the topic, who requested it (user or automation), the sources received, why it fits the mission, and which Vinted items are featured.
 4. Stop. The human reviews and merges.
 

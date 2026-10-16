@@ -10,6 +10,8 @@
  * insights that already exist on it.
  */
 
+import type { AnalyticsEventName } from "../src/lib/analytics";
+
 const HOST = "https://eu.i.posthog.com";
 const DASHBOARD_NAME = "Isar Things Shop";
 
@@ -66,7 +68,8 @@ if (dashboardId) {
 }
 
 // ── 3. Insight definitions (modern `query` format) ──────────────────────────
-type Event = { kind: "EventsNode"; event: string; math?: string };
+// Event names come from the site's catalogue, so a typo here fails type-checking.
+type Event = { kind: "EventsNode"; event: AnalyticsEventName | "$pageview"; math?: string };
 type InsightDef = { name: string; description?: string; query: Params };
 
 const trend = (

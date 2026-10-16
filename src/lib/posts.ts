@@ -2,13 +2,11 @@
 // with a small frontmatter block (title, date, excerpt, tags and an optional
 // cover) and the slug is the filename. Cover and inline images are filenames from
 // src/assets/carousel/, so the same photos can be reused in posts.
+import { photoUrl } from "@/lib/shop";
+
 const postFiles = import.meta.glob<string>("../content/posts/*.md", {
   query: "?raw",
   import: "default",
-  eager: true,
-});
-
-const imageFiles = import.meta.glob<{ default: string }>("../assets/carousel/*.webp", {
   eager: true,
 });
 
@@ -23,11 +21,7 @@ export type Post = {
 };
 
 export function postImageUrl(filename: string): string {
-  const entry = Object.entries(imageFiles).find(([path]) => path.endsWith(`/${filename}`));
-  if (!entry) {
-    throw new Error(`A blog post references "${filename}", but it isn't in src/assets/carousel/.`);
-  }
-  return entry[1].default;
+  return photoUrl(filename, "A blog post");
 }
 
 function parsePost(slug: string, raw: string): Post {

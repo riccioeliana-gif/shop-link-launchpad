@@ -16,6 +16,9 @@
  * Runs on a daily schedule via .github/workflows/vinted-sync.yml.
  */
 
+// Same CSV reader as the site. Node 22.18+ runs this .ts file directly.
+import { parseCsvRows as parseCsv, stringifyCsv } from "../src/lib/csv.ts";
+
 const CAROUSEL_PATH = new URL("../src/data/carousel.csv", import.meta.url);
 const LINKS_PATH = new URL("../src/data/links.csv", import.meta.url);
 const POSTS_DIR = new URL("../src/content/posts/", import.meta.url);
@@ -26,60 +29,6 @@ const USER_AGENT =
 const REQUEST_DELAY_MS = 3000;
 const REQUEST_JITTER_MS = 2000;
 const MAX_RETRIES = 3;
-
-// ---------------------------------------------------------------- CSV helpers
-
-/** Parse a CSV string (handles quoted fields with commas and "" escapes). */
-function parseCsv(text) {
-  const rows = [];
-  let row = [];
-  let field = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (inQuotes) {
-      if (char === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i++;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += char;
-      }
-    } else if (char === '"') {
-      inQuotes = true;
-    } else if (char === ",") {
-      row.push(field);
-      field = "";
-    } else if (char === "\n" || char === "\r") {
-      if (char === "\r" && text[i + 1] === "\n") i++;
-      row.push(field);
-      field = "";
-      rows.push(row);
-      row = [];
-    } else {
-      field += char;
-    }
-  }
-  if (field !== "" || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows.filter((r) => r.length > 1 || r[0] !== "");
-}
-
-/** Serialize rows back to CSV, quoting only where necessary. */
-function csvEscape(value) {
-  if (/[",\n\r]/.test(value)) return `"${value.replace(/"/g, '""')}"`;
-  return value;
-}
-
-function stringifyCsv(rows) {
-  return rows.map((row) => row.map(csvEscape).join(",")).join("\n") + "\n";
-}
 
 // ---------------------------------------------------------------- Item checks
 

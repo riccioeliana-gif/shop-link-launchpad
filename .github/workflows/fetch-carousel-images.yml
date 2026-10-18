@@ -1,0 +1,30 @@
+name: fetch-carousel-images
+
+on:
+  push:
+    branches: [claude/project-thread-i0e741]
+    paths: [scripts/carousel-images.txt]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download images
+        run: |
+          mkdir -p tmp-carousel
+          while read -r slug url; do
+            [ -z "$slug" ] && continue
+            curl -fsSL -A "Mozilla/5.0" -o "tmp-carousel/$slug.jpg" "$url"
+          done < scripts/carousel-images.txt
+          ls -la tmp-carousel
+      - name: Commit
+        run: |
+          git config user.name "carousel-images bot"
+          git config user.email "actions@github.com"
+          git add tmp-carousel
+          git commit -m "Download photos for new Vinted items"
+          git push

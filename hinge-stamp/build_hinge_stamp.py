@@ -11,11 +11,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 LOGO = os.path.join(HERE, "..", "src", "assets", "isar-logo-clear.webp")
 
 # --- parametri (mm) ---
-PLATE_T, PLATE_Y = 4.0, 44.0
-X_IN, X_OUT = 7.4, 48.0       # distanza dall'asse: bordo interno / esterno piastra
-BARREL_R, PIN_D = 4.0, 2.0    # perno: filamento 1.75 mm
+PLATE_T, PLATE_Y = 5.0, 44.0
+BARREL_R = PLATE_T             # asse sul piano di chiusura, il nodo tocca il piano di stampa
+X_IN, X_OUT = BARREL_R + 3.4, 72.0  # bordo interno / esterno piastra (la parte oltre il logo fa da leva)
+PIN_D = 2.0                    # perno: filamento 1.75 mm
 KNUCKLES, GAP = 5, 0.5
-LOGO_W, RELIEF, POCKET_D, CLEAR = 34.0, 0.9, 1.4, 0.3
+LOGO_W, RELIEF, POCKET_D, CLEAR = 34.0, 0.4, 0.7, 0.15  # carta 80 g: rilievo basso, gioco ~ spessore carta
 
 # --- logo -> poligono (mm), lettere con buchi via XOR ---
 im = Image.open(LOGO).convert("RGBA")
@@ -55,7 +56,7 @@ def cyl_y(r, y0, y1, z):
 U = lambda ms: trimesh.boolean.union(ms, engine="manifold")
 D = lambda a, bs: trimesh.boolean.difference([a] + bs, engine="manifold")
 
-cx = (X_IN + X_OUT) / 2
+cx = X_IN + 3 + LOGO_W / 2     # logo vicino alla cerniera: piu' leva sul manico
 cy = PLATE_Y / 2
 w = (PLATE_Y - (KNUCKLES - 1) * GAP) / KNUCKLES
 
@@ -70,8 +71,8 @@ def plate(sign):
 
 A = plate(-1)   # piastra maschio: logo in rilievo
 B = plate(+1)   # piastra femmina: tasca a specchio (si chiude ribaltandosi sull'asse)
-A = U([A, extrude(poly, RELIEF, PLATE_T, -cx, cy)])
-pocket = extrude(poly.buffer(CLEAR), POCKET_D, PLATE_T - POCKET_D, cx, cy, mirror=True)
+A = U([A, extrude(poly, RELIEF, PLATE_T, -cx, cy, mirror=True)])  # rilievo A a specchio: sulla carta si legge dritto
+pocket = extrude(poly.buffer(CLEAR), POCKET_D, PLATE_T - POCKET_D, cx, cy)
 B = D(B, [pocket])
 pin = cyl_y(PIN_D / 2, -1, PLATE_Y + 1, PLATE_T)
 A = D(A, [pin]); B = D(B, [pin])
@@ -83,8 +84,8 @@ print("A", A.is_watertight, "B", B.is_watertight, trimesh.util.concatenate([A, B
 
 # --- versione in un unico pezzo (print-in-place): perno fuso alla piastra A,
 # foro della piastra B con gioco radiale; si stampa tutto insieme, aperto e piatto ---
-PIP_PIN_D, PIP_CLEAR = 3.0, 0.35
-A1 = U([plate(-1), extrude(poly, RELIEF, PLATE_T, -cx, cy), cyl_y(PIP_PIN_D / 2, 0, PLATE_Y, PLATE_T)])
+PIP_PIN_D, PIP_CLEAR = 3.0, 0.3
+A1 = U([plate(-1), extrude(poly, RELIEF, PLATE_T, -cx, cy, mirror=True), cyl_y(PIP_PIN_D / 2, 0, PLATE_Y, PLATE_T)])
 B1 = D(plate(+1), [pocket, cyl_y(PIP_PIN_D / 2 + PIP_CLEAR, -1, PLATE_Y + 1, PLATE_T)])
 one = trimesh.util.concatenate([A1, B1])
 one.export(os.path.join(HERE, "hinge_stamp_unico.stl"))

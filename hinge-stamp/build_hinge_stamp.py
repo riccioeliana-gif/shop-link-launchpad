@@ -14,7 +14,7 @@ LOGO = os.path.join(HERE, "..", "src", "assets", "isar-logo-clear.webp")
 PLATE_T, PLATE_Y = 4.0, 44.0
 X_IN, X_OUT = 7.4, 48.0       # distanza dall'asse: bordo interno / esterno piastra
 BARREL_R, PIN_D = 4.0, 2.0    # perno: filamento 1.75 mm
-KNUCKLES, GAP = 5, 0.4
+KNUCKLES, GAP = 5, 0.5
 LOGO_W, RELIEF, POCKET_D, CLEAR = 34.0, 0.9, 1.4, 0.3
 
 # --- logo -> poligono (mm), lettere con buchi via XOR ---
@@ -80,3 +80,12 @@ A.export(os.path.join(HERE, "piastra_A_logo_rilievo.stl"))
 B.export(os.path.join(HERE, "piastra_B_logo_incavo.stl"))
 U([A, B]).export(os.path.join(HERE, "hinge_stamp.stl"))
 print("A", A.is_watertight, "B", B.is_watertight, trimesh.util.concatenate([A, B]).bounds.tolist())
+
+# --- versione in un unico pezzo (print-in-place): perno fuso alla piastra A,
+# foro della piastra B con gioco radiale; si stampa tutto insieme, aperto e piatto ---
+PIP_PIN_D, PIP_CLEAR = 3.0, 0.35
+A1 = U([plate(-1), extrude(poly, RELIEF, PLATE_T, -cx, cy), cyl_y(PIP_PIN_D / 2, 0, PLATE_Y, PLATE_T)])
+B1 = D(plate(+1), [pocket, cyl_y(PIP_PIN_D / 2 + PIP_CLEAR, -1, PLATE_Y + 1, PLATE_T)])
+one = trimesh.util.concatenate([A1, B1])
+one.export(os.path.join(HERE, "hinge_stamp_unico.stl"))
+print("unico: componenti separati =", len(one.split(only_watertight=False)), "(attesi 2: A col perno, B)", one.bounds.tolist())

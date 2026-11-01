@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { WaitlistForm } from "@/components/waitlist-form";
+import { markWaitlistJoined } from "@/lib/waitlist-flags";
 import { useTrack } from "@/lib/analytics";
 import { ColorWords } from "./index";
 
@@ -44,9 +45,14 @@ function WaitlistPage() {
 
         <div className="mt-8">
           <WaitlistForm
-            onJoin={(email) =>
-              track("waitlist_joined", { email_domain: email.split("@")[1] ?? "" })
-            }
+            placement="page"
+            onJoin={(email) => {
+              markWaitlistJoined();
+              track("waitlist_joined", {
+                email_domain: email.split("@")[1] ?? "",
+                placement: "page",
+              });
+            }}
             onEvent={track}
           />
         </div>

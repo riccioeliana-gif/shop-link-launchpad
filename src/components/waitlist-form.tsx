@@ -9,11 +9,25 @@ export type WaitlistState =
   | { status: "done" }
   | { status: "error"; message: string };
 
+const ACCENTS = {
+  blue: {
+    button: "border-brand-blue bg-brand-blue",
+    shadow: "var(--brand-blue-text)",
+    ring: "focus:ring-brand-blue/40",
+  },
+  pink: {
+    button: "border-brand-pink bg-brand-pink",
+    shadow: "var(--brand-pink-text)",
+    ring: "focus:ring-brand-pink/40",
+  },
+} as const;
+
 export function WaitlistForm({
   onJoin,
   onEvent,
   placement,
   variant = "card",
+  accent = "blue",
 }: {
   onJoin: (email: string) => void;
   onEvent?: Track;
@@ -21,7 +35,10 @@ export function WaitlistForm({
   placement: WaitlistPlacement;
   /** "card" is the standalone block; "plain" is bare form for embedding (popup). */
   variant?: "card" | "plain";
+  /** Color of the submit button and input focus ring. */
+  accent?: keyof typeof ACCENTS;
 }) {
+  const accentStyles = ACCENTS[accent];
   const [state, setState] = useState<WaitlistState>({ status: "idle" });
   const [email, setEmail] = useState("");
 
@@ -127,13 +144,13 @@ export function WaitlistForm({
             if (state.status === "error") setState({ status: "idle" });
           }}
           aria-invalid={state.status === "error"}
-          className="min-w-0 flex-1 rounded-2xl border-2 border-ink bg-background px-4 py-3 font-semibold text-ink placeholder:text-muted-foreground focus:outline-none focus:ring-4 focus:ring-brand-blue/40"
+          className={`min-w-0 flex-1 rounded-2xl border-2 border-ink bg-background px-4 py-3 font-semibold text-ink placeholder:text-muted-foreground focus:outline-none focus:ring-4 ${accentStyles.ring}`}
         />
         <button
           type="submit"
           disabled={state.status === "submitting"}
-          className="toy-block whitespace-nowrap rounded-2xl border-2 border-brand-blue bg-brand-blue px-5 py-3 text-sm font-extrabold text-ink disabled:cursor-wait disabled:opacity-70 sm:text-base"
-          style={{ ["--block-shadow" as string]: "var(--brand-blue-text)" }}
+          className={`toy-block whitespace-nowrap rounded-2xl border-2 ${accentStyles.button} px-5 py-3 text-sm font-extrabold text-ink disabled:cursor-wait disabled:opacity-70 sm:text-base`}
+          style={{ ["--block-shadow" as string]: accentStyles.shadow }}
         >
           {state.status === "submitting" ? "Sending…" : "Notify me →"}
         </button>

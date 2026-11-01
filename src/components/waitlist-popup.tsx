@@ -92,7 +92,7 @@ export function WaitlistPopup() {
           onInteractOutside={() => (dismissMethod.current = "backdrop")}
           className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-[2.5rem] border-[3px] border-ink bg-card p-6 shadow-[0_10px_0_0_var(--brand-blue)] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:p-8"
         >
-          <span className="mx-auto grid size-16 place-items-center rounded-full border-[3px] border-ink bg-brand-blue">
+          <span className="mx-auto grid size-16 place-items-center rounded-full border-[3px] border-ink bg-brand-pink">
             <svg
               viewBox="0 0 24 24"
               className="size-8 text-ink"
@@ -114,7 +114,13 @@ export function WaitlistPopup() {
             Sign up and we'll send you first access to new treasures. No spam, just early dibs on
             the good stuff.
           </DialogPrimitive.Description>
-          <WaitlistForm variant="plain" placement="popup" onJoin={handleJoin} onEvent={track} />
+          <WaitlistForm
+            variant="plain"
+            placement="popup"
+            accent="pink"
+            onJoin={handleJoin}
+            onEvent={track}
+          />
           <DialogPrimitive.Close
             onClick={() => (dismissMethod.current = "close_button")}
             className="toy-block absolute right-4 top-4 grid size-9 place-items-center rounded-full border-2 border-ink bg-card text-ink"

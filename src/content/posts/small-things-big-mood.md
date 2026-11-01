@@ -36,7 +36,7 @@ Just ideas, no rules:
 
 This lilac teddy pouch is soft as a cloud. Use it for make-up, or for pens, cables, snacks, whatever deserves a cosy home.
 
-[See the lilac teddy pouch on Vinted →](https://www.vinted.it/items/10454815799)
+[See the lilac teddy pouch on Vinted →](https://www.vinted.it/member/57442722)
 
 ## Tiny sparkle
 

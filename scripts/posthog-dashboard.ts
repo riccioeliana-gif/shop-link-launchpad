@@ -69,7 +69,12 @@ if (dashboardId) {
 
 // ── 3. Insight definitions (modern `query` format) ──────────────────────────
 // Event names come from the site's catalogue, so a typo here fails type-checking.
-type Event = { kind: "EventsNode"; event: AnalyticsEventName | "$pageview"; math?: string };
+type Event = {
+  kind: "EventsNode";
+  event: AnalyticsEventName | "$pageview";
+  math?: string;
+  properties?: Params[];
+};
 type InsightDef = { name: string; description?: string; query: Params };
 
 const trend = (
@@ -136,6 +141,41 @@ const insights: InsightDef[] = [
         { kind: "EventsNode", event: "waitlist_form_viewed" },
         { kind: "EventsNode", event: "waitlist_submit_clicked" },
         { kind: "EventsNode", event: "waitlist_joined" },
+      ],
+    },
+  },
+  {
+    name: "Iscrizioni per canale",
+    description: "Iscrizioni alla waiting list per canale (sezione home, pagina dedicata, popup)",
+    query: trend([{ kind: "EventsNode", event: "waitlist_joined" }], "ActionsBarValue", {
+      breakdown: "placement",
+    }),
+  },
+  {
+    name: "Popup waiting list: viste e chiusure",
+    description: "Quante volte il popup viene mostrato e quante viene chiuso senza iscrizione",
+    query: trend(
+      [
+        { kind: "EventsNode", event: "waitlist_popup_shown" },
+        { kind: "EventsNode", event: "waitlist_popup_dismissed" },
+      ],
+      "ActionsLineGraph",
+    ),
+  },
+  {
+    name: "Funnel popup waiting list",
+    description: "Popup mostrato → iscrizione dal popup",
+    query: {
+      kind: "FunnelsQuery",
+      dateRange: { date_from: "-30d" },
+      interval: "day",
+      series: [
+        { kind: "EventsNode", event: "waitlist_popup_shown" },
+        {
+          kind: "EventsNode",
+          event: "waitlist_joined",
+          properties: [{ key: "placement", type: "event", value: ["popup"], operator: "exact" }],
+        },
       ],
     },
   },

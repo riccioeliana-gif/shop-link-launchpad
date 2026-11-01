@@ -5,6 +5,8 @@ const SCROLL_DEPTHS = [25, 50, 75, 100] as const;
 export type ScrollDepth = (typeof SCROLL_DEPTHS)[number];
 
 type Placement = "hero" | "carousel" | "content_card" | "footer";
+/** Where the waitlist form was filled in: home section, /waitlist page, or popup. */
+export type WaitlistPlacement = "section" | "page" | "popup";
 type CarouselClick = { placement: "carousel"; post_index: number; photo: string };
 
 /**
@@ -25,11 +27,14 @@ export type AnalyticsEvents = {
   scroll_depth: { percent: ScrollDepth };
   home_blog_post_clicked: { slug: string };
   home_blog_link_clicked: { placement: "blog_section" | "footer" };
-  // Waitlist
+  // Waitlist (same funnel in three placements, told apart by `placement`)
   waitlist_form_viewed: undefined;
-  waitlist_submit_clicked: undefined;
-  waitlist_error: { reason: "invalid_email" | "server" };
-  waitlist_joined: { email_domain: string };
+  waitlist_submit_clicked: { placement: WaitlistPlacement };
+  waitlist_error: { reason: "invalid_email" | "server"; placement: WaitlistPlacement };
+  waitlist_joined: { email_domain: string; placement: WaitlistPlacement };
+  // Waitlist popup (timed dialog on the home page, after ~10s + scroll)
+  waitlist_popup_shown: undefined;
+  waitlist_popup_dismissed: { method: "close_button" | "backdrop" | "escape" };
   // Blog
   blog_post_clicked: { slug: string; position: number };
   blog_post_viewed: { slug: string };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { z } from "zod";
-import type { Track } from "@/lib/analytics";
+import type { Track, WaitlistPlacement } from "@/lib/analytics";
 import { joinWaitlist } from "@/lib/waitlist";
 
 export type WaitlistState =
@@ -12,9 +12,15 @@ export type WaitlistState =
 export function WaitlistForm({
   onJoin,
   onEvent,
+  placement,
+  variant = "card",
 }: {
   onJoin: (email: string) => void;
   onEvent?: Track;
+  /** Where the form lives, sent with every funnel event. */
+  placement: WaitlistPlacement;
+  /** "card" is the standalone block; "plain" is bare form for embedding (popup). */
+  variant?: "card" | "plain";
 }) {
   const [state, setState] = useState<WaitlistState>({ status: "idle" });
   const [email, setEmail] = useState("");
@@ -22,7 +28,7 @@ export function WaitlistForm({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (state.status === "submitting") return;
-    onEvent?.("waitlist_submit_clicked");
+    onEvent?.("waitlist_submit_clicked", { placement });
     setState({ status: "submitting" });
     try {
       await joinWaitlist({ data: email });
@@ -31,7 +37,10 @@ export function WaitlistForm({
     } catch (error) {
       const invalidEmail =
         error instanceof z.ZodError || (error instanceof Error && /email/i.test(error.message));
-      onEvent?.("waitlist_error", { reason: invalidEmail ? "invalid_email" : "server" });
+      onEvent?.("waitlist_error", {
+        reason: invalidEmail ? "invalid_email" : "server",
+        placement,
+      });
       const message = invalidEmail
         ? "Hmm, that email doesn't look right. Mind checking it?"
         : "Something went wrong. Please try again in a moment!";
@@ -40,6 +49,30 @@ export function WaitlistForm({
   };
 
   if (state.status === "done") {
+    if (variant === "plain") {
+      return (
+        <div className="text-center" role="status">
+          <span className="mx-auto grid size-12 place-items-center rounded-full border-[3px] border-ink bg-brand-green">
+            <svg
+              viewBox="0 0 24 24"
+              className="size-6 text-ink"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m4 12.5 5 5L20 6.5" />
+            </svg>
+          </span>
+          <p className="mt-3 font-display text-2xl font-bold text-ink">You're on the list! 🎉</p>
+          <p className="mt-1 font-semibold text-muted-foreground">
+            You'll hear about new drops a full day before everyone else.
+          </p>
+        </div>
+      );
+    }
     return (
       <div
         className="toy-piece rounded-[2.5rem] bg-brand-green p-8 text-center"
@@ -71,36 +104,8 @@ export function WaitlistForm({
     );
   }
 
-  return (
-    <div
-      className="toy-piece rounded-[2.5rem] bg-card p-8 text-center sm:p-10"
-      style={{
-        ["--piece-border" as string]: "var(--brand-blue)",
-        ["--piece-shadow" as string]: "var(--brand-blue)",
-      }}
-    >
-      <span className="mx-auto grid size-16 place-items-center rounded-full border-[3px] border-ink bg-brand-blue">
-        <svg
-          viewBox="0 0 24 24"
-          className="size-8 text-ink"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-          <path d="m3 7 9 6 9-6" />
-        </svg>
-      </span>
-      <h2 className="mt-4 font-display text-3xl font-bold text-brand-blue-text sm:text-4xl">
-        See new drops 24 hours before everyone else
-      </h2>
-      <p className="mx-auto mt-2 max-w-sm font-semibold text-muted-foreground">
-        Sign up and we'll send you first access to new treasures. No spam, just early dibs on the
-        good stuff.
-      </p>
+  const formContent = (
+    <>
       <form
         onSubmit={handleSubmit}
         className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row"
@@ -138,6 +143,42 @@ export function WaitlistForm({
           {state.message}
         </p>
       ) : null}
+    </>
+  );
+
+  if (variant === "plain") return formContent;
+
+  return (
+    <div
+      className="toy-piece rounded-[2.5rem] bg-card p-8 text-center sm:p-10"
+      style={{
+        ["--piece-border" as string]: "var(--brand-blue)",
+        ["--piece-shadow" as string]: "var(--brand-blue)",
+      }}
+    >
+      <span className="mx-auto grid size-16 place-items-center rounded-full border-[3px] border-ink bg-brand-blue">
+        <svg
+          viewBox="0 0 24 24"
+          className="size-8 text-ink"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <path d="m3 7 9 6 9-6" />
+        </svg>
+      </span>
+      <h2 className="mt-4 font-display text-3xl font-bold text-brand-blue-text sm:text-4xl">
+        See new drops 24 hours before everyone else
+      </h2>
+      <p className="mx-auto mt-2 max-w-sm font-semibold text-muted-foreground">
+        Sign up and we'll send you first access to new treasures. No spam, just early dibs on the
+        good stuff.
+      </p>
+      {formContent}
     </div>
   );
 }

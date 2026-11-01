@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useScrollDepth, useTrack } from "@/lib/analytics";
 import { WaitlistForm } from "@/components/waitlist-form";
+import { WaitlistPopup } from "@/components/waitlist-popup";
+import { markWaitlistJoined } from "@/lib/waitlist-flags";
 import { openCookieBanner } from "@/lib/consent";
 import { formatPostDate, getPosts, postImageUrl } from "@/lib/posts";
 import { CAROUSEL_ITEMS, SHOP_LINKS } from "@/lib/shop";
@@ -551,9 +553,14 @@ function Index() {
           className="mx-auto max-w-2xl scroll-mt-20 px-4 pb-20 sm:px-6"
         >
           <WaitlistForm
-            onJoin={(email) =>
-              track("waitlist_joined", { email_domain: email.split("@")[1] ?? "" })
-            }
+            placement="section"
+            onJoin={(email) => {
+              markWaitlistJoined();
+              track("waitlist_joined", {
+                email_domain: email.split("@")[1] ?? "",
+                placement: "section",
+              });
+            }}
             onEvent={track}
           />
         </section>
@@ -631,6 +638,8 @@ function Index() {
           </p>
         </div>
       </footer>
+
+      <WaitlistPopup />
     </div>
   );
 }

@@ -5,8 +5,8 @@ import { useTrack } from "@/lib/analytics";
 import { markWaitlistJoined, readWaitlistFlag, writeWaitlistFlag } from "@/lib/waitlist-flags";
 import { WaitlistForm } from "@/components/waitlist-form";
 
-/** Time on page before the first scroll can open the popup. */
-const SHOW_AFTER_MS = 10_000;
+/** Time after page load before the popup opens. */
+const SHOW_AFTER_MS = 3_000;
 /** Grace period to read the success message before the dialog closes itself. */
 const AUTO_CLOSE_MS = 4_000;
 
@@ -14,8 +14,8 @@ type DismissMethod = "close_button" | "backdrop" | "escape";
 
 /**
  * Timed waitlist dialog for the home page. Analytics show most visitors never
- * scroll far enough to see the form section, so after ~10s on the page the
- * first scroll opens the form in a dialog. Shown at most once per tab session,
+ * scroll far enough to see the form section, so 3s after the page loads the
+ * form opens in a dialog, without waiting for a scroll. Shown at most once per tab session,
  * never to visitors who already joined, and never while the waitlist section
  * itself is on screen.
  */
@@ -25,20 +25,13 @@ export function WaitlistPopup() {
   const joinedRef = useRef(false);
   const dismissMethod = useRef<DismissMethod>("close_button");
 
-  // Arm the popup: fires on the first scroll that happens once SHOW_AFTER_MS
-  // have passed (scrolling earlier counts too — it fires at the 10s mark).
+  // Open the popup SHOW_AFTER_MS after the page loads, no scroll needed.
   useEffect(() => {
     if (readWaitlistFlag("shown") || readWaitlistFlag("joined")) return;
 
-    let ready = false;
-    let scrolled = window.scrollY > 0;
-    let done = false;
-
-    const show = () => {
-      if (done) return;
-      done = true;
+    const timer = window.setTimeout(() => {
       // Don't interrupt someone who is already looking at the form section,
-      // or who signed up since the popup armed.
+      // or who signed up in the meantime.
       const section = document.getElementById("waitlist");
       if (section) {
         const rect = section.getBoundingClientRect();
@@ -48,23 +41,9 @@ export function WaitlistPopup() {
       writeWaitlistFlag("shown");
       setOpen(true);
       track("waitlist_popup_shown");
-    };
-
-    const timer = window.setTimeout(() => {
-      ready = true;
-      if (scrolled) show();
     }, SHOW_AFTER_MS);
 
-    const onScroll = () => {
-      scrolled = true;
-      if (ready) show();
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

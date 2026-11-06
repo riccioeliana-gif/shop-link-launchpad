@@ -20,7 +20,7 @@ And if tomorrow you feel like something quieter? Swap it. No rules, no commitmen
 
 This fuchsia puffy crossbody is a good example: quilted, soft-looking, with a little flower charm. It's the kind of bag that makes a grey Monday look more like a party. Wear it however you like.
 
-[See the fuchsia quilted bag on Vinted →](https://www.vinted.it/items/10455246828)
+[See the fuchsia quilted bag on Vinted →](https://www.vinted.it/member/57442722)
 
 ## Pockets of joy: a few ideas
 
@@ -42,7 +42,7 @@ This lilac teddy pouch is soft as a cloud. Use it for make-up, or for pens, cabl
 
 If you'd rather wear your mood, there's a gold huggie with a little pink heart, and a big gold sunburst stud with a heart in the middle. Both small, both cheerful.
 
-[See the pink heart huggie earring on Vinted →](https://www.vinted.it/items/10442872151)
+[See the pink heart huggie earring on Vinted →](https://www.vinted.it/member/57442722)
 
 ## Make it yours
 

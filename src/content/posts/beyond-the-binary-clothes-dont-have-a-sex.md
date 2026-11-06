@@ -31,7 +31,7 @@ That's it. That's the whole idea:
 
 This fuchsia jumper with a big black and white yin yang on the front is loud, round and a little bit playful. It belongs to whoever picks it. Wear it however you like.
 
-[See the fuchsia yin yang jumper on Vinted →](https://www.vinted.it/items/10528718364)
+[See the fuchsia yin yang jumper on Vinted →](https://www.vinted.it/member/57442722)
 
 ## You belong here
 

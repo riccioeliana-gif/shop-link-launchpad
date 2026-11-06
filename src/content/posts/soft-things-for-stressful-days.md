@@ -28,13 +28,13 @@ No rules, just ideas for the days that need them:
 
 This brown fluffy cardigan has little gold buttons and a V-neck, and it feels like a hug. Wear it open, buttoned up, over a tee, however you like.
 
-[See the brown fluffy cardigan on Vinted →](https://www.vinted.it/items/10572151670)
+[See the brown fluffy cardigan on Vinted →](https://www.vinted.it/member/57442722)
 
 ![Cream teddy sherpa Gimme makeup bag with red hearts held in one hand](cream-teddy-red-hearts-makeup-bag.webp)
 
 And this cream teddy pouch with red hearts is soft as a cloud. Keep your calming bits in it, or just squeeze it for a moment.
 
-[See the cream teddy pouch on Vinted →](https://www.vinted.it/items/10545267819)
+[See the cream teddy pouch on Vinted →](https://www.vinted.it/member/57442722)
 
 ## Be gentle with yourself
 

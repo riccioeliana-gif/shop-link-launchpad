@@ -36,7 +36,7 @@ There's no dress code. No rules. Just a few ideas:
 
 Our purple-ish pick this week is not even something you wear: our little lilac jewellery tray with red flowers is where your pins and rings can live the other 364 days of the year. A small, happy reminder on your shelf.
 
-[See the lilac jewellery tray on Vinted →](https://www.vinted.it/items/10240411151-lilac-ceramic-jewellery-tray-red-flowers-trinket-dish-ring-dish-new-with-tags-never-used)
+[See the lilac jewellery tray on Vinted →](https://www.vinted.it/member/57442722)
 
 ## You're welcome here
 

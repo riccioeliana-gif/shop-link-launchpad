@@ -33,7 +33,7 @@ The detail is the joke. A tiny thing that tells everyone who you are tonight.
 
 This little orange cat "Hello" charm with a rainbow beaded cord is a good start for a very friendly cat costume. Clip it on your bag, your belt loop or your jacket.
 
-[See the cat charm on Vinted →](https://www.vinted.it/items/10347370742-happy-vibe-pendant-blue-green-with-cat-new)
+[See the cat charm on Vinted →](https://www.vinted.it/member/57442722)
 
 ## No pressure
 

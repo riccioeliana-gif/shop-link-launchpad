@@ -1,6 +1,6 @@
 ---
 title: "Cosy corner: knits for the first cold weeks"
-date: 2026-11-10
+date: 2026-11-11
 excerpt: The first properly cold weeks are here. Soft cardigans, chunky jumpers and a long striped scarf: our cosy corner, in as many colours as we could find.
 cover: grey-fluffy-flower-button-cardigan-sm.webp
 tags: knitwear, autumn, styling

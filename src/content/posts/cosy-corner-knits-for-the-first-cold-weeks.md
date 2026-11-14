@@ -18,7 +18,7 @@ When the temperature drops, the first thing to pull out is the piece that feels 
 
 This grey fluffy cardigan has little gold flower buttons, which is a lot of charm for a calm colour. Wear it open over a tee, buttoned up on its own, or thrown over your shoulders on the way to the café. Wear it however you like.
 
-[See the grey flower-button cardigan on Vinted →](https://www.vinted.it/items/10651299894)
+[See the grey flower-button cardigan on Vinted →](https://www.vinted.it/member/57442722)
 
 ## Go chunky, go loud
 

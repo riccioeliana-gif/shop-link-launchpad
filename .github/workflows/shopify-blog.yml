@@ -1,0 +1,25 @@
+name: Publish blog to Shopify
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/posts/**'
+      - 'src/assets/carousel/**'
+      - 'scripts/shopify-blog-sync.mjs'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save marked@12
+      - run: node scripts/shopify-blog-sync.mjs
+        env:
+          SHOPIFY_STORE: ckm400-ib.myshopify.com
+          SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+          SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}

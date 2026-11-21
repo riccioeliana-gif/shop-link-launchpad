@@ -1,0 +1,44 @@
+{
+  "source": "https://it.yehwang.com/cardigan-in-maglia-a-righe-in-fibra-di-poliestere-poliestere-abbigliamento-casual-autunno-inverno-57503.html",
+  "supplierSku": "0605843-331 SM",
+  "handle": "striped-ruffle-collar-cardigan-pink",
+  "title": "Striped Ruffle Cardigan – Big Collar – Fuchsia & Pink",
+  "status": "DRAFT",
+  "vendor": "Isar Things",
+  "productType": "Knitwear",
+  "category": "gid://shopify/TaxonomyCategory/aa-1-13-3",
+  "tags": ["autumn-winter", "cardigan", "colourful", "fuchsia", "knitwear", "new-with-tags", "pink", "ruffle", "stripes"],
+  "seo": {
+    "title": "Striped Ruffle Cardigan, S/M | Isar Things",
+    "description": "Fuchsia and pink striped cardigan with a big collar, ruffle hem and cuffs and gold buttons. Size S/M, new with tags, only one piece."
+  },
+  "descriptionHtml": "<p>Fuchsia and candy-pink stripes, an oversized pointed collar and little ruffles at the hem and cuffs: this cardigan is pure joy. Gold-tone buttons down the front, soft brushed knit, fitted silhouette. Wear it buttoned up as a top or open over a white tee with your favourite jeans.</p>\n<p>Made for every body and every style, because at Isar no piece has just one way to be worn.</p>\n<p><strong>Details</strong></p>\n<ul>\n<li>Brand new with tags</li>\n<li>Colour: fuchsia and pink stripes, pink collar and ruffles</li>\n<li>Size: S/M</li>\n<li>Material: 60% polyester, 19% polyamide, 15% acrylic, 6% wool</li>\n<li>Fit: regular, slightly cropped</li>\n</ul>\n<p><strong>Size guide (cm)</strong></p>\n<table>\n<thead>\n<tr>\n<th>Size</th>\n<th>Shoulders</th>\n<th>Bust</th>\n<th>Sleeve length</th>\n<th>Overall length</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>S/M</td>\n<td>39</td>\n<td>100</td>\n<td>60</td>\n<td>54</td>\n</tr>\n<tr>\n<td>L/XL</td>\n<td>40</td>\n<td>104</td>\n<td>61</td>\n<td>56</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Shipping &amp; returns:</strong> ships from Italy. Returns accepted within 14 days.</p>",
+  "options": [
+    { "name": "Color", "values": ["Pink"] },
+    { "name": "Size", "values": ["S/M"] }
+  ],
+  "variants": [
+    {
+      "options": { "Color": "Pink", "Size": "S/M" },
+      "sku": "0605843-331-SM",
+      "barcode": null,
+      "price": "28.00",
+      "weightKg": 0.413,
+      "tracked": true
+    }
+  ],
+  "metafields": [
+    { "namespace": "shopify", "key": "age-group", "type": "list.metaobject_reference", "value": ["gid://shopify/Metaobject/819500843334"] },
+    { "namespace": "shopify", "key": "target-gender", "type": "list.metaobject_reference", "value": ["gid://shopify/Metaobject/825237766470"] },
+    { "namespace": "shopify", "key": "size-type", "type": "list.metaobject_reference", "value": ["gid://shopify/Metaobject/819450904902"] },
+    { "namespace": "shopify", "key": "sleeve-length-type", "type": "list.metaobject_reference", "value": ["gid://shopify/Metaobject/818958926150"] },
+    { "namespace": "shopify", "key": "color-pattern", "type": "list.metaobject_reference", "value": ["gid://shopify/Metaobject/819448742214"] }
+  ],
+  "images": [
+    { "file": "images/striped-ruffle-collar-cardigan-pink-sm-tiles.jpg", "alt": "Fuchsia and pink striped cardigan with big pink collar, ruffle hem and cuffs, hanging on a white tiled wall with pink grout" },
+    { "url": "https://img-cdn.yehwang.com/image/catalog/27c8ce1d-1f4c-4a42-b6ea-a992ad878853.jpg", "alt": "Fuchsia and pink striped cardigan, front view with collar and gold buttons" },
+    { "url": "https://img-cdn.yehwang.com/image/catalog/0af30270-e5be-40af-8944-7072d6c707fb.jpg", "alt": "Fuchsia and pink striped cardigan, back view with ruffle hem" },
+    { "url": "https://img-cdn.yehwang.com/image/catalog/image/Clothes/Knitwear%20Sweaters/bdbd759c-6bfa-4be2-ae3e-931d27282c7b.jpg", "alt": "Model wearing the fuchsia and pink striped ruffle cardigan with jeans" },
+    { "url": "https://img-cdn.yehwang.com/image/catalog/image/Clothes/Knitwear%20Sweaters/faa502d3-e996-4db3-bccd-88e3e7f56c42.jpg", "alt": "Full-length look: fuchsia and pink striped ruffle cardigan with wide-leg jeans" }
+  ]
+}
